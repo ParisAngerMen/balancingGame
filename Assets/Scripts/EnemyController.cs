@@ -36,7 +36,7 @@ public class EnemyController : MonoBehaviour
         currentHealth = maxHealth;
         navMeshAgent.speed = speed;
         navMeshAgent.SetDestination(enemyBase.position);
-        StartCoroutine(SightCheck());
+        //StartCoroutine(SightCheck());
 
     }
 
