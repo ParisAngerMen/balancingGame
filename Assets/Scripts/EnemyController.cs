@@ -10,7 +10,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private Transform enemyBase;
     
     // Bools
-    public bool isBlue;
+    // public bool isBlue;
     
     // Float
     [Header("Variables Balanceo")]
@@ -20,6 +20,7 @@ public class EnemyController : MonoBehaviour
     
     private float currentHealth;
     [SerializeField] private float angleRange;
+    [SerializeField] private float rotSpeed;
     
     // Component ref
     private NavMeshAgent navMeshAgent;
@@ -35,8 +36,10 @@ public class EnemyController : MonoBehaviour
     {
         currentHealth = maxHealth;
         navMeshAgent.speed = speed;
+        
+        //navMeshAgent.updateRotation = false;
         navMeshAgent.SetDestination(enemyBase.position);
-        //StartCoroutine(SightCheck());
+        StartCoroutine(SightCheck());
 
     }
 
@@ -44,6 +47,8 @@ public class EnemyController : MonoBehaviour
     void Update()
     {
         
+        
+        //Turn(navMeshAgent.destination);
     }
 
     public void TakeDamage(float damage)
@@ -59,6 +64,15 @@ public class EnemyController : MonoBehaviour
     private void Die()
     {
         // Death logico
+    }
+
+    private void Turn(Vector3 destination)
+    {
+        if ((destination - transform.position).magnitude < 0.1f) return; 
+        
+        Vector3 direction = (destination - transform.position).normalized;
+        Quaternion  qDir= Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Slerp(transform.rotation, qDir, Time.deltaTime * rotSpeed);
     }
 
     private IEnumerator SightCheck()
@@ -77,7 +91,10 @@ public class EnemyController : MonoBehaviour
                 
                 if (angle < angleRange)
                 {
-                    navMeshAgent.SetDestination(hit.transform.position);
+                    if (Vector3.Distance(transform.position, hitPoint) >
+                        Vector3.Distance(transform.position, navMeshAgent.destination)) yield break;
+                    
+                    navMeshAgent.SetDestination(hitPoint);
                     
                     Debug.Log("Sight");
                     Debug.Log("Angle: "  + angle);
