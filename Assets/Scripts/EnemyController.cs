@@ -1,13 +1,14 @@
 using System;
 using System.Collections;
 using UnityEditor.Experimental.GraphView;
+using UnityEditor.Searcher;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class EnemyController : MonoBehaviour
 {
     // Objects / Transforms
-    [SerializeField] private Transform enemyBase;
+    private Transform enemyBase;
     
     // Bools
     // public bool isBlue;
@@ -17,6 +18,8 @@ public class EnemyController : MonoBehaviour
     public float maxHealth;
     [SerializeField] private float speed;
     [SerializeField] private float visionRange;
+    [SerializeField] private float attackRate;
+    [SerializeField] private float attackDamage;
     
     private float currentHealth;
     [SerializeField] private float angleRange;
@@ -29,6 +32,18 @@ public class EnemyController : MonoBehaviour
     private void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
+        
+        if (gameObject.layer == LayerMask.NameToLayer("Blue"))
+        {
+            enemyBase = GameObject.FindGameObjectWithTag("RedBase").transform;
+        }
+        
+        else if (gameObject.layer == LayerMask.NameToLayer("Red"))
+        {
+            enemyBase = GameObject.FindGameObjectWithTag("BlueBase").transform;
+
+        }
+        
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -43,17 +58,11 @@ public class EnemyController : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-        
-        //Turn(navMeshAgent.destination);
-    }
-
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
+        
+        Debug.Log("Health: " + currentHealth);
 
         if (currentHealth <= 0)
         {
@@ -63,16 +72,8 @@ public class EnemyController : MonoBehaviour
 
     private void Die()
     {
-        // Death logico
-    }
-
-    private void Turn(Vector3 destination)
-    {
-        if ((destination - transform.position).magnitude < 0.1f) return; 
-        
-        Vector3 direction = (destination - transform.position).normalized;
-        Quaternion  qDir= Quaternion.LookRotation(direction);
-        transform.rotation = Quaternion.Slerp(transform.rotation, qDir, Time.deltaTime * rotSpeed);
+        StopAllCoroutines();
+        Destroy(gameObject);
     }
 
     private IEnumerator SightCheck()
@@ -81,28 +82,36 @@ public class EnemyController : MonoBehaviour
         {
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, visionRange, enemyMask,
                 QueryTriggerInteraction.Collide);
+            
+            Debug.Log("Checking for sight");
 
             foreach (Collider hit in hitColliders)
             {
+                Debug.Log("HitPoint: " + hit.gameObject.name);
+                
                 Vector3 hitPoint = hit.transform.position;
                 Vector3 targetDirection = hitPoint - transform.position;
-                
+
+                if (Vector3.Distance(transform.position, hitPoint) >
+                    Vector3.Distance(transform.position, navMeshAgent.destination) && 
+                    (!hit.CompareTag("BlueBase") || !hit.CompareTag("BlueBase"))) yield break; 
+
                 float angle = Vector3.Angle(targetDirection, transform.forward);
                 
                 if (angle < angleRange)
                 {
-                    if (Vector3.Distance(transform.position, hitPoint) >
-                        Vector3.Distance(transform.position, navMeshAgent.destination)) yield break;
+                    Debug.Log("Object detected");
                     
                     navMeshAgent.SetDestination(hitPoint);
-                    
-                    Debug.Log("Sight");
-                    Debug.Log("Angle: "  + angle);
+                    StartCoroutine(Attack(hit.gameObject));
                 }
 
                 else
                 {
-                    Debug.Log("Angle: "  + angle);
+                    Debug.Log("Object not found");
+                    
+                    StopCoroutine(Attack(hit.gameObject));
+                    navMeshAgent.SetDestination(enemyBase.transform.position);
                 }
 
             }
@@ -112,10 +121,40 @@ public class EnemyController : MonoBehaviour
         
     }
 
-    private void OnDrawGizmos()
+    private IEnumerator Attack(GameObject target)
     {
-        //Gizmos.DrawSphere(transform.position, visionRange);
+        while (true)
+        {
+            Debug.Log("Attacking");
+            
+            if (target == null)
+            {
+                Debug.Log("Enemy not found");
+                if (enemyBase != null)
+                {
+                    navMeshAgent.destination = enemyBase.transform.position;
+                }
+                
+                yield return SightCheck();
+                yield break;
+            }
+            
+            Debug.Log("Target: " + target.name);
 
+            if (target.GetComponent<BaseScript>() != null)
+            {
+                Debug.Log("Attacking base");
+                target.GetComponent<BaseScript>().TakeDamage(attackDamage);
+            }
+
+            else
+            {
+                target.GetComponent<EnemyController>().TakeDamage(attackDamage);
+            }
+            
+            yield return new WaitForSeconds(attackRate);
+        }
     }
+    
     
 }
