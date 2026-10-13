@@ -128,16 +128,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c50247f2844803543a9c307fd241a5e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  maxHealth: 100
   speed: 10
+  health: 15
+  damage: 5
+  range: 10
+  cooldown: 0.3
   visionRange: 10
-  attackRate: 1
-  attackDamage: 10
   angleRange: 180
   rotSpeed: 1
   enemyMask:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 7
 --- !u!195 &6291005428140119612
 NavMeshAgent:
   m_ObjectHideFlags: 0

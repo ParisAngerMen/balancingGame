@@ -14,14 +14,17 @@ public class EnemyController : MonoBehaviour
     // public bool isBlue;
     
     // Float
-    [Header("Variables Balanceo")]
-    public float maxHealth;
+    [Header("Balance Variables")]
     [SerializeField] private float speed;
-    [SerializeField] private float visionRange;
-    [SerializeField] private float attackRate;
-    [SerializeField] private float attackDamage;
+    public float health;
+    [SerializeField] private float damage;
+    [SerializeField] private float range;
+    [SerializeField] private float cooldown;
     
+    [Header("Other Variables")]
+    [SerializeField] private float visionRange;
     private float currentHealth;
+    private float attackTimer = 0f;
     [SerializeField] private float angleRange;
     [SerializeField] private float rotSpeed;
     
@@ -49,13 +52,19 @@ public class EnemyController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        currentHealth = maxHealth;
+        currentHealth = health;
         navMeshAgent.speed = speed;
+        navMeshAgent.stoppingDistance = range;
         
         //navMeshAgent.updateRotation = false;
         navMeshAgent.SetDestination(enemyBase.position);
         StartCoroutine(SightCheck());
 
+    }
+
+    private void Update()
+    {
+        Debug.Log("Destination: " + navMeshAgent.destination);
     }
 
     public void TakeDamage(float damage)
@@ -139,20 +148,26 @@ public class EnemyController : MonoBehaviour
                 yield break;
             }
             
-            Debug.Log("Target: " + target.name);
-
-            if (target.GetComponent<BaseScript>() != null)
+            attackTimer += Time.deltaTime;
+            
+            Debug.Log("Time to attack: " + attackTimer);
+            
+            if (attackTimer >= cooldown)
             {
-                Debug.Log("Attacking base");
-                target.GetComponent<BaseScript>().TakeDamage(attackDamage);
-            }
+                if (target.GetComponent<BaseScript>() != null)
+                {
+                    target.GetComponent<BaseScript>().TakeDamage(damage);
+                }
 
-            else
-            {
-                target.GetComponent<EnemyController>().TakeDamage(attackDamage);
+                else
+                {
+                    target.GetComponent<EnemyController>().TakeDamage(damage);
+                }
+
+                attackTimer = 0f;
             }
             
-            yield return new WaitForSeconds(attackRate);
+            yield return new WaitForSeconds(0.1f);
         }
     }
     

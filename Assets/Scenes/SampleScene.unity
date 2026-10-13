@@ -119,6 +119,54 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &99048906
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 99048908}
+  - component: {fileID: 99048907}
+  m_Layer: 0
+  m_Name: DataManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &99048907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 99048906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cca89d9a9b349c74a91060dffb09260a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExcelManager
+  csvUrl: https://docs.google.com/spreadsheets/d/1IYGPzlwWVCxNhuXYFZlyHszzTKziprnKgK_mhtmKzPg/edit?gid=0#gid=0
+  soldierObj: {fileID: 5441500299126889127, guid: 526abecb67e608340b414e6ce76c5b67, type: 3}
+  tankObj: {fileID: 0}
+  archerObj: {fileID: 0}
+--- !u!4 &99048908
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 99048906}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -4.45642, y: 0.5, z: -0.6533}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -476,10 +524,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66ea63309fb5b22408de845cf1a6dbcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  blueMelee: {fileID: 6357272903679219275, guid: 10bdb487cb8855d45a4bac910b485927, type: 3}
-  redMelee: {fileID: 5441500299126889127, guid: aef8ae447aa7adf4787a80f3204f7770, type: 3}
+  melee: {fileID: 5441500299126889127, guid: 526abecb67e608340b414e6ce76c5b67, type: 3}
   blueSpawnZone: {fileID: 1017333090}
   redSpawnZone: {fileID: 977434918}
+  red: {fileID: 2100000, guid: ac920a1e5dee4cd4089f38664556f581, type: 2}
+  blue: {fileID: 2100000, guid: d2930f92d40ae764ea6f20947856271b, type: 2}
 --- !u!1 &977434917
 GameObject:
   m_ObjectHideFlags: 0
@@ -779,7 +828,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 918b08ba59f34f74282d970195a8fb87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BaseScript
-  maxHealth: 100
+  maxHealth: 10000
 --- !u!1 &1273409507
 GameObject:
   m_ObjectHideFlags: 0
@@ -969,7 +1018,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 918b08ba59f34f74282d970195a8fb87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  maxHealth: 100
+  maxHealth: 10000
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -984,3 +1033,4 @@ SceneRoots:
   - {fileID: 913041623}
   - {fileID: 977434918}
   - {fileID: 1017333090}
+  - {fileID: 99048908}

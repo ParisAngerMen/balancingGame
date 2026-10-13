@@ -128,11 +128,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c50247f2844803543a9c307fd241a5e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  maxHealth: 100
   speed: 10
+  health: 15
+  damage: 5
+  range: 10
+  cooldown: 0.3
   visionRange: 10
-  attackRate: 1
-  attackDamage: 10
   angleRange: 180
   rotSpeed: 1
   enemyMask:
@@ -148,11 +149,11 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 10
   m_Acceleration: 35
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 5
+  m_StoppingDistance: 10
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
