@@ -5,6 +5,7 @@ using static UnityEngine.Input;
 public class SpawnerScript : MonoBehaviour
 {
     public GameObject melee;
+    public GameObject tank;
     
     public Transform blueSpawnZone;
     public Transform redSpawnZone;
@@ -42,16 +43,22 @@ public class SpawnerScript : MonoBehaviour
         if (GetKeyDown(KeyCode.Alpha2))
         {
             SetTeam(melee, false);
+        }        
+        
+        if (GetKeyDown(KeyCode.Alpha3))
+        {
+            SetTeam(tank, true);
+        }
+        
+        if (GetKeyDown(KeyCode.Alpha4))
+        {
+            SetTeam(tank, false);
         }
     }
 
     void SpawnEnemy(GameObject enemy,  Vector3 spawnZone)
     {
-        enemySpawnNumber++;
-        enemy.name = enemySpawnNumber.ToString();
-
         Instantiate(enemy, spawnZone, Quaternion.identity);
-
     }
 
     void SetTeam(GameObject enemy, bool isRed)
@@ -64,7 +71,7 @@ public class SpawnerScript : MonoBehaviour
             meshRenderer = enemy.GetComponent<MeshRenderer>();
             
             meshRenderer.material = red;
-            CalculateSpawnPoint(melee, redSpawnZone);
+            CalculateSpawnPoint(enemy, redSpawnZone);
         }
 
         else
@@ -75,7 +82,7 @@ public class SpawnerScript : MonoBehaviour
             meshRenderer = enemy.GetComponent<MeshRenderer>();
             
             meshRenderer.material = blue;
-            CalculateSpawnPoint(melee, blueSpawnZone);
+            CalculateSpawnPoint(enemy, blueSpawnZone);
 
         }
     }

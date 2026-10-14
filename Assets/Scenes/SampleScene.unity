@@ -129,8 +129,9 @@ GameObject:
   m_Component:
   - component: {fileID: 99048908}
   - component: {fileID: 99048907}
+  - component: {fileID: 99048909}
   m_Layer: 0
-  m_Name: DataManager
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -149,8 +150,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExcelManager
   csvUrl: https://docs.google.com/spreadsheets/d/1IYGPzlwWVCxNhuXYFZlyHszzTKziprnKgK_mhtmKzPg/edit?gid=0#gid=0
-  soldierObj: {fileID: 5441500299126889127, guid: 526abecb67e608340b414e6ce76c5b67, type: 3}
-  tankObj: {fileID: 0}
+  melee: {fileID: 5441500299126889127, guid: 526abecb67e608340b414e6ce76c5b67, type: 3}
+  tankObj: {fileID: 5441500299126889127, guid: 93842ffab8907d5429143731a9616923, type: 3}
   archerObj: {fileID: 0}
 --- !u!4 &99048908
 Transform:
@@ -167,6 +168,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &99048909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 99048906}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29f36f8972394c44a9622fc8a38b4f0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -228,8 +241,8 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
-  orthographic size: 5
+  orthographic: 1
+  orthographic size: 24
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -253,13 +266,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.09076552, y: -0.8906353, z: 0.20410186, w: 0.3960718}
+  m_LocalPosition: {x: 26.465769, y: 16.482271, z: 20.99853}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 25.815, y: -132.05, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -431,6 +444,81 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!1 &738542448
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 738542449}
+  - component: {fileID: 738542450}
+  - component: {fileID: 738542451}
+  m_Layer: 0
+  m_Name: ClickHandler
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &738542449
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 738542448}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.86981, y: 0.5, z: -0.96269}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &738542450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 738542448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29f36f8972394c44a9622fc8a38b4f0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MouseBehaviour
+--- !u!114 &738542451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 738542448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
+  m_Actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: Keyboard&Mouse
+  m_DefaultActionMap: Debug
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -525,6 +613,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   melee: {fileID: 5441500299126889127, guid: 526abecb67e608340b414e6ce76c5b67, type: 3}
+  tank: {fileID: 5441500299126889127, guid: 93842ffab8907d5429143731a9616923, type: 3}
   blueSpawnZone: {fileID: 1017333090}
   redSpawnZone: {fileID: 977434918}
   red: {fileID: 2100000, guid: ac920a1e5dee4cd4089f38664556f581, type: 2}
@@ -810,7 +899,7 @@ Transform:
   m_GameObject: {fileID: 1259935340}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -14.84, y: 2.08, z: 13.68}
+  m_LocalPosition: {x: -15.09, y: 2.08, z: 15.18}
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1000,7 +1089,7 @@ Transform:
   m_GameObject: {fileID: 2142010174}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 15.57, y: 2.08, z: -18.22}
+  m_LocalPosition: {x: 15.09, y: 2.08, z: -15.18}
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1034,3 +1123,4 @@ SceneRoots:
   - {fileID: 977434918}
   - {fileID: 1017333090}
   - {fileID: 99048908}
+  - {fileID: 738542449}

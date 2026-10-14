@@ -8,7 +8,7 @@ public class ExcelManager : MonoBehaviour
     [SerializeField] private string csvUrl ;
 
     [Header("Drag capsules from Hierarchy here")]
-    public GameObject soldierObj;
+    public GameObject melee;
     public GameObject tankObj;
     public GameObject archerObj;
 
@@ -41,26 +41,27 @@ public class ExcelManager : MonoBehaviour
         {
             string[] fields = lines[i].Trim().Split(',');
 
-            if (fields.Length >= 4)
+            if (fields.Length >= 6)
             {
                 string unitName = fields[0].Trim().ToLower();
-                int.TryParse(fields[1].Trim(), out int attack);
-                int.TryParse(fields[2].Trim(), out int defense);
-                int.TryParse(fields[3].Trim(), out int speed);
+                float.TryParse(fields[1].Trim(), out float speed);
+                float.TryParse(fields[2].Trim(), out float health);
+                float.TryParse(fields[3].Trim(), out float damage);
+                float.TryParse(fields[4].Trim(), out float range);
+                float.TryParse(fields[5].Trim(), out float cooldown);
 
-                AssignToObject(unitName, attack, defense, speed);
-            }
+                AssignToObject(unitName, speed, health, damage, range, cooldown);
         }
     }
 
-    void AssignToObject(string name, int attack, int defense, int speed)
+    void AssignToObject(string name, float speed, float health, float damage, float range, float cooldown)
     {
         GameObject target = null;
 
         // Note: These cases must match exactly the text in your CSV (e.g., "soldier", "tank", "archer")
         switch (name)
         {
-            case "soldier": target = soldierObj; break;
+            case "melee": target = melee; break;
             case "tank": target = tankObj; break;
             case "archer": target = archerObj; break;
         }
@@ -73,11 +74,14 @@ public class ExcelManager : MonoBehaviour
                 stats = target.AddComponent<UnitStats>();
             }
 
-            stats.attack = attack;
-            stats.defense = defense;
+            stats.damage = damage;
+            stats.cooldown = cooldown;
             stats.speed = speed;
+            stats.health = health;
+            stats.range = range;
 
-            Debug.Log($"[Success] {target.name} updated -> Attack: {attack}, Defense: {defense}, Speed: {speed}");
+            Debug.Log($"[Success] {target.name} updated -> Speed: {speed}, Health: {health}, Damage: {damage}, Range: {range}, Cooldown: {cooldown}");
         }
     }
+}
 }
