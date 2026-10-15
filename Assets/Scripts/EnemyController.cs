@@ -5,10 +5,12 @@ using UnityEditor.Searcher;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyController : MonoBehaviour
+public class EnemyController : MonoBehaviour, IDamageable
 {
+    
     // Objects / Transforms
-    private Transform enemyBase;
+    [Header("Enemy Base")]
+    public GameObject enemyBase;
     
     // Bools
     // public bool isBlue;
@@ -16,34 +18,37 @@ public class EnemyController : MonoBehaviour
     // Float
     [Header("Balance Variables")]
     [SerializeField] private float speed;
-    public float health;
-    [SerializeField] private float damage;
+    [field: SerializeField] public float maxHealth { get; set; }
+    public float currentHealth { get; set; }
+    [SerializeField] public float damage;
     [SerializeField] private float range;
-    [SerializeField] private float cooldown;
+    [SerializeField] public float cooldown;
     
     [Header("Other Variables")]
     [SerializeField] private float visionRange;
-    private float currentHealth;
-    private float attackTimer = 0f;
+    public float attackTimer = 0f;
     [SerializeField] private float angleRange;
     [SerializeField] private float rotSpeed;
+
     
-    // Component ref
-    private NavMeshAgent navMeshAgent;
+    [Header("Other Components")]
+    public GameObject enemyHit;
+    public NavMeshAgent navMeshAgent;
     public LayerMask enemyMask;
 
+    private Coroutine attackCoroutine;
     private void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
         
         if (gameObject.layer == LayerMask.NameToLayer("Blue"))
         {
-            enemyBase = GameObject.FindGameObjectWithTag("RedBase").transform;
+            enemyBase = GameObject.FindGameObjectWithTag("RedBase");
         }
         
         else if (gameObject.layer == LayerMask.NameToLayer("Red"))
         {
-            enemyBase = GameObject.FindGameObjectWithTag("BlueBase").transform;
+            enemyBase = GameObject.FindGameObjectWithTag("BlueBase");
 
         }
         
@@ -52,19 +57,20 @@ public class EnemyController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        currentHealth = health;
+        enemyHit = enemyBase;
+        currentHealth = maxHealth;
         navMeshAgent.speed = speed;
         navMeshAgent.stoppingDistance = range;
         
         //navMeshAgent.updateRotation = false;
-        navMeshAgent.SetDestination(enemyBase.position);
+        navMeshAgent.SetDestination(enemyBase.transform.position);
         StartCoroutine(SightCheck());
 
     }
 
     private void Update()
     {
-        Debug.Log("Destination: " + navMeshAgent.destination);
+        //Debug.Log("Destination: " + navMeshAgent.destination);
     }
 
     public void TakeDamage(float damage)
@@ -79,13 +85,13 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    private void Die()
+    public void Die()
     {
         StopAllCoroutines();
         Destroy(gameObject);
     }
 
-    private IEnumerator SightCheck()
+    public IEnumerator SightCheck()
     {
         while (true)
         {
@@ -97,28 +103,34 @@ public class EnemyController : MonoBehaviour
             foreach (Collider hit in hitColliders)
             {
                 Debug.Log("HitPoint: " + hit.gameObject.name);
-                
                 Vector3 hitPoint = hit.transform.position;
                 Vector3 targetDirection = hitPoint - transform.position;
 
-                if (Vector3.Distance(transform.position, hitPoint) >
+                if (Vector3.Distance(transform.position, hitPoint) > 
                     Vector3.Distance(transform.position, navMeshAgent.destination) && 
-                    (!hit.CompareTag("BlueBase") || !hit.CompareTag("BlueBase"))) yield break; 
+                    hit.gameObject.CompareTag("Enemy"))
+                {
+                    yield break;
+                } 
 
                 float angle = Vector3.Angle(targetDirection, transform.forward);
                 
                 if (angle < angleRange)
                 {
                     Debug.Log("Object detected");
-                    
-                    navMeshAgent.SetDestination(hitPoint);
-                    StartCoroutine(Attack(hit.gameObject));
+
+                    if (attackCoroutine == null)
+                    {
+                        enemyHit = hit.gameObject;
+                        navMeshAgent.SetDestination(hitPoint);
+                        attackCoroutine = StartCoroutine(Attack(hit.gameObject));
+                    }
                 }
 
                 else
                 {
+                    enemyHit = enemyBase;
                     Debug.Log("Object not found");
-                    
                     StopCoroutine(Attack(hit.gameObject));
                     navMeshAgent.SetDestination(enemyBase.transform.position);
                 }
@@ -130,7 +142,7 @@ public class EnemyController : MonoBehaviour
         
     }
 
-    private IEnumerator Attack(GameObject target)
+    public virtual IEnumerator Attack(GameObject target)
     {
         while (true)
         {
@@ -139,37 +151,31 @@ public class EnemyController : MonoBehaviour
             if (target == null)
             {
                 Debug.Log("Enemy not found");
+                
                 if (enemyBase != null)
                 {
+                    enemyHit = enemyBase;
                     navMeshAgent.destination = enemyBase.transform.position;
                 }
-                
+
+                attackTimer = 0f;
+                attackCoroutine = null;
                 yield return SightCheck();
                 yield break;
             }
             
-            attackTimer += Time.deltaTime;
-            
             Debug.Log("Time to attack: " + attackTimer);
             
-            if (attackTimer >= cooldown)
-            {
-                if (target.GetComponent<BaseScript>() != null)
-                {
-                    target.GetComponent<BaseScript>().TakeDamage(damage);
-                }
-
-                else
-                {
-                    target.GetComponent<EnemyController>().TakeDamage(damage);
-                }
-
-                attackTimer = 0f;
-            }
+            IDamageable damageable = target.GetComponent<IDamageable>();
+            Debug.Log(target.name + " taking damage");
+            damageable.TakeDamage(damage);
             
-            yield return new WaitForSeconds(0.1f);
+            attackTimer = 0f;
+            
+            yield return new WaitForSeconds(cooldown);
         }
     }
-    
+
     
 }
+

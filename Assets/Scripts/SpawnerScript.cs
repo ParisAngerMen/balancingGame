@@ -58,7 +58,8 @@ public class SpawnerScript : MonoBehaviour
 
     void SpawnEnemy(GameObject enemy,  Vector3 spawnZone)
     {
-        Instantiate(enemy, spawnZone, Quaternion.identity);
+        var clone = Instantiate(enemy, spawnZone, Quaternion.identity);
+        clone.name = enemy.name;
     }
 
     void SetTeam(GameObject enemy, bool isRed)

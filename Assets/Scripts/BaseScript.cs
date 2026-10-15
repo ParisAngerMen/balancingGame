@@ -1,20 +1,14 @@
 using UnityEngine;
 
-public class BaseScript : MonoBehaviour
+public class BaseScript : MonoBehaviour, IDamageable
 {
-    [SerializeField] private float maxHealth = 100f;
-    private float currentHealth;
+    [field: SerializeField] public float maxHealth { get; set; }
+    public float currentHealth { get; set; }
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         currentHealth = maxHealth;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void TakeDamage(float damage)
@@ -26,6 +20,11 @@ public class BaseScript : MonoBehaviour
         {
             Die();
         }
+    }
+
+    void IDamageable.Die()
+    {
+        Die();
     }
 
     private void Die()
