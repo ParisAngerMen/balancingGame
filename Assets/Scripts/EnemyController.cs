@@ -23,6 +23,8 @@ public class EnemyController : MonoBehaviour, IDamageable
     [SerializeField] public float damage;
     [SerializeField] private float range;
     [SerializeField] public float cooldown;
+    [SerializeField] public float lootPoints;
+    [SerializeField] public float pointsToBuy;
     
     [Header("Other Variables")]
     [SerializeField] private float visionRange;
@@ -88,6 +90,17 @@ public class EnemyController : MonoBehaviour, IDamageable
     public void Die()
     {
         StopAllCoroutines();
+
+        if (gameObject.layer == LayerMask.NameToLayer("Red"))
+        {
+            PointManager.instance.AddPoints(lootPoints, true);
+        }
+
+        else
+        {
+            PointManager.instance.AddPoints(lootPoints, false);
+        }
+        
         Destroy(gameObject);
     }
 

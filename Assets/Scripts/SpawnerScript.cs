@@ -62,7 +62,7 @@ public class SpawnerScript : MonoBehaviour
         clone.name = enemy.name;
     }
 
-    void SetTeam(GameObject enemy, bool isRed)
+    public void SetTeam(GameObject enemy, bool isRed)
     {
         if (isRed)
         {
