@@ -16,7 +16,6 @@ public class MouseBehaviour : MonoBehaviour
     
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI healthText;
-    public TextMeshProUGUI velocity;
     public TextMeshProUGUI enemySeen;
     public TextMeshProUGUI attackCooldown;
     public TextMeshProUGUI teamName;
@@ -36,11 +35,17 @@ public class MouseBehaviour : MonoBehaviour
         {
             if (hit.collider.CompareTag("Enemy"))
             {
+                enemySeen.enabled = true;
+                attackCooldown.enabled = true;
+                
                 StartCoroutine(EnemyStatNames(hit));
             }
 
             if (hit.collider.CompareTag("RedBase") || hit.collider.CompareTag("BlueBase"))
             {
+                enemySeen.enabled = false;
+                attackCooldown.enabled = false;
+                
                 StartCoroutine(BaseStatNames(hit));
             }
             
@@ -67,7 +72,6 @@ public class MouseBehaviour : MonoBehaviour
             
                 nameText.text = enemy.name;
                 healthText.text = "Health: " + enemy.GetComponent<IDamageable>().currentHealth;
-                velocity.text = "Speed: " + enemy.GetComponent<NavMeshAgent>().speed;
                 attackCooldown.text = "Time until next attack: " + enemy.GetComponent<EnemyController>().attackTimer;
                 teamName.text = "Layer: " + enemy.layer;
 
@@ -102,6 +106,7 @@ public class MouseBehaviour : MonoBehaviour
             
                 nameText.text = enemyBase.name;
                 healthText.text = "Health: " + enemyBase.GetComponent<IDamageable>().currentHealth;
+                teamName.text = "Layer: " + enemyBase.layer;
                 
             }
 

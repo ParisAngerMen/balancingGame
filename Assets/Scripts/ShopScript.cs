@@ -1,5 +1,6 @@
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShopScript : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class ShopScript : MonoBehaviour
 
     public GameObject melee;
     public GameObject tank;
-
+    
     private void BuyUnit(float cost, GameObject unit)
     {
         if (isRed)

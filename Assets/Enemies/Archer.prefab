@@ -170,12 +170,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   enemyBase: {fileID: 0}
   speed: 5
-  health: 15
+  <maxHealth>k__BackingField: 15
   damage: 2
   range: 5
   cooldown: 0.7
+  lootPoints: 0
+  pointsToBuy: 0
   visionRange: 10
-  currentHealth: 0
   attackTimer: 0
   angleRange: 180
   rotSpeed: 1

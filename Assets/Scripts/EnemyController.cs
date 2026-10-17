@@ -24,7 +24,6 @@ public class EnemyController : MonoBehaviour, IDamageable
     [SerializeField] private float range;
     [SerializeField] public float cooldown;
     [SerializeField] public float lootPoints;
-    [SerializeField] public float pointsToBuy;
     
     [Header("Other Variables")]
     [SerializeField] private float visionRange;
@@ -93,12 +92,12 @@ public class EnemyController : MonoBehaviour, IDamageable
 
         if (gameObject.layer == LayerMask.NameToLayer("Red"))
         {
-            PointManager.instance.AddPoints(lootPoints, true);
+            PointManager.instance.AddPoints(lootPoints, false);
         }
 
         else
         {
-            PointManager.instance.AddPoints(lootPoints, false);
+            PointManager.instance.AddPoints(lootPoints, true);
         }
         
         Destroy(gameObject);

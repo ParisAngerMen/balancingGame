@@ -135,8 +135,7 @@ MonoBehaviour:
   damage: 2
   range: 5
   cooldown: 0.7
-  lootPoints: 10
-  pointsToBuy: 0
+  lootPoints: 25
   visionRange: 10
   attackTimer: 0
   angleRange: 180
