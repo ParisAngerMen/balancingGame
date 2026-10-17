@@ -4,6 +4,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEditor.Searcher;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class EnemyController : MonoBehaviour, IDamageable
 {
@@ -38,6 +39,9 @@ public class EnemyController : MonoBehaviour, IDamageable
     public NavMeshAgent navMeshAgent;
     public LayerMask enemyMask;
 
+    [Header("UI")]
+    [SerializeField]private Slider healthBar;
+
     private Coroutine attackCoroutine;
     private void Awake()
     {
@@ -61,6 +65,13 @@ public class EnemyController : MonoBehaviour, IDamageable
     {
         enemyHit = enemyBase;
         currentHealth = maxHealth;
+
+        if(healthBar != null)
+        {
+            healthBar.maxValue = maxHealth;
+            healthBar.value = currentHealth;
+        }
+
         navMeshAgent.speed = speed;
         navMeshAgent.stoppingDistance = range;
         
@@ -78,7 +89,12 @@ public class EnemyController : MonoBehaviour, IDamageable
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        
+
+        if (healthBar != null)
+        {
+            healthBar.value = currentHealth;
+        }
+
         Debug.Log("Health: " + currentHealth);
 
         if (currentHealth <= 0)
