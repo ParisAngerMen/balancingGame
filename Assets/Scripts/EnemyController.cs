@@ -234,6 +234,12 @@ public class EnemyController : MonoBehaviour, IDamageable
             
             
             IDamageable damageable = target.GetComponent<IDamageable>();
+
+            if (attackSound != null)
+            {
+                audioSource.PlayOneShot(attackSound);
+            }
+
             damageable.TakeDamage(damage);
             
             attackTimer = 0f;
