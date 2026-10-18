@@ -49,7 +49,7 @@ public class EnemyController : MonoBehaviour, IDamageable
     private AudioSource audioSource;
 
 
-    private Coroutine attackCoroutine;
+    protected Coroutine attackCoroutine;
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
