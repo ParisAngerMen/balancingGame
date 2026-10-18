@@ -413,6 +413,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   healthBar: {fileID: 6856755763271432700}
+  hitEffectPrefab: {fileID: 0}
+  attackSound: {fileID: 8300000, guid: 9865e417a58f5c948a058abd0d29a1c0, type: 3}
+  hurtSound: {fileID: 8300000, guid: 5dedaf233a679c64ba9d8e4010c95afc, type: 3}
 --- !u!195 &6291005428140119612
 NavMeshAgent:
   m_ObjectHideFlags: 0
