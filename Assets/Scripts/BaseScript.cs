@@ -14,21 +14,28 @@ public class BaseScript : MonoBehaviour, IDamageable
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        Debug.Log("Health: " + currentHealth);
 
         if (currentHealth <= 0)
         {
             Die();
         }
     }
+    
 
-    void IDamageable.Die()
-    {
-        Die();
-    }
-
-    private void Die()
+    public void Die()
     {
         Destroy(gameObject);
+
+        if (gameObject.layer == 6)
+        {
+            
+        }
+
+        else
+        {
+            
+        }
     }
+
+
 }
