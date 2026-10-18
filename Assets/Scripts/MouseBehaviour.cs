@@ -27,8 +27,6 @@ public class MouseBehaviour : MonoBehaviour
 
     public void OnClick() 
     {
-        Debug.Log("OnClick");
-        
         Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit);
 
         if (hit.collider != null)
@@ -49,7 +47,6 @@ public class MouseBehaviour : MonoBehaviour
                 StartCoroutine(BaseStatNames(hit));
             }
             
-            Debug.Log("Click Name: " + hit.collider.name);
             Selection.activeGameObject = hit.collider.gameObject;
 
         }
@@ -120,6 +117,11 @@ public class MouseBehaviour : MonoBehaviour
         }
         
         
+        
+    }
+
+    public void EnableGizmos(bool enableGizmos)
+    {
         
     }
 }

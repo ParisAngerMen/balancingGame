@@ -37,6 +37,7 @@ public class EnemyController : MonoBehaviour, IDamageable
     public GameObject enemyHit;
     public NavMeshAgent navMeshAgent;
     public LayerMask enemyMask;
+    private Animator animator;
 
     [Header("UI")]
     [SerializeField]private Slider healthBar;
@@ -45,6 +46,7 @@ public class EnemyController : MonoBehaviour, IDamageable
     private void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
         
         if (gameObject.layer == LayerMask.NameToLayer("Blue"))
         {
@@ -82,7 +84,7 @@ public class EnemyController : MonoBehaviour, IDamageable
 
     private void Update()
     {
-        //Debug.Log("Destination: " + navMeshAgent.destination);
+
     }
 
     public void TakeDamage(float damage)
@@ -94,7 +96,6 @@ public class EnemyController : MonoBehaviour, IDamageable
             healthBar.value = currentHealth;
         }
 
-        Debug.Log("Health: " + currentHealth);
 
         if (currentHealth <= 0)
         {
@@ -126,11 +127,9 @@ public class EnemyController : MonoBehaviour, IDamageable
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, visionRange, enemyMask,
                 QueryTriggerInteraction.Collide);
             
-            Debug.Log("Checking for sight");
 
             foreach (Collider hit in hitColliders)
             {
-                Debug.Log("HitPoint: " + hit.gameObject.name);
                 Vector3 hitPoint = hit.transform.position;
                 Vector3 targetDirection = hitPoint - transform.position;
 
@@ -145,20 +144,22 @@ public class EnemyController : MonoBehaviour, IDamageable
                 
                 if (angle < angleRange)
                 {
-                    Debug.Log("Object detected");
-
                     if (attackCoroutine == null)
                     {
                         enemyHit = hit.gameObject;
                         navMeshAgent.SetDestination(hitPoint);
-                        attackCoroutine = StartCoroutine(Attack(hit.gameObject));
+                        navMeshAgent.updateRotation = false;
+                        animator.SetBool("attack", true);
+                        
+                        attackCoroutine = StartCoroutine(Attack(enemyHit));
+                        StartCoroutine(AttackTime(enemyHit));
                     }
+                    
                 }
 
                 else
                 {
                     enemyHit = enemyBase;
-                    Debug.Log("Object not found");
                     StopCoroutine(Attack(hit.gameObject));
                     navMeshAgent.SetDestination(enemyBase.transform.position);
                 }
@@ -170,15 +171,30 @@ public class EnemyController : MonoBehaviour, IDamageable
         
     }
 
+    public IEnumerator AttackTime(GameObject target)
+    {
+        while (true)
+        {
+            if (target != null)
+            {
+                transform.LookAt(target.transform);
+            }
+
+            else
+            {
+                yield break;
+            }
+            yield return new WaitForEndOfFrame();
+        }
+    }
+    
     public virtual IEnumerator Attack(GameObject target)
     {
         while (true)
         {
-            Debug.Log("Attacking");
             
             if (target == null)
             {
-                Debug.Log("Enemy not found");
                 
                 if (enemyBase != null)
                 {
@@ -188,14 +204,14 @@ public class EnemyController : MonoBehaviour, IDamageable
 
                 attackTimer = 0f;
                 attackCoroutine = null;
+                animator.SetBool("attack", false);
+                navMeshAgent.updateRotation = true;
                 yield return SightCheck();
                 yield break;
             }
             
-            Debug.Log("Time to attack: " + attackTimer);
             
             IDamageable damageable = target.GetComponent<IDamageable>();
-            Debug.Log(target.name + " taking damage");
             damageable.TakeDamage(damage);
             
             attackTimer = 0f;
@@ -204,6 +220,16 @@ public class EnemyController : MonoBehaviour, IDamageable
         }
     }
 
-    
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, visionRange);
+        
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, range);
+
+        
+        
+    }
 }
 

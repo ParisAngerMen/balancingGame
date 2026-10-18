@@ -20,9 +20,7 @@ public class SpawnerScript : MonoBehaviour
 
     private LayerMask blueMask;
     private LayerMask redMask;
-    
-    //private float spawnZoneX;
-    //private float spawnZoneZ;
+
     
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -67,7 +65,6 @@ public class SpawnerScript : MonoBehaviour
         if (isRed)
         {
             enemy.GetComponent<EnemyController>().enemyMask = blueMask;
-            Debug.Log("enemy mask: " + enemy.GetComponent<EnemyController>().enemyMask);
             enemy.layer = LayerMask.NameToLayer("Red");
             meshRenderer = enemy.GetComponent<MeshRenderer>();
             
@@ -78,7 +75,6 @@ public class SpawnerScript : MonoBehaviour
         else
         {
             enemy.GetComponent<EnemyController>().enemyMask = redMask;  
-            Debug.Log("enemy mask: " + enemy.GetComponent<EnemyController>().enemyMask);
             enemy.layer = LayerMask.NameToLayer("Blue");
             meshRenderer = enemy.GetComponent<MeshRenderer>();
             
