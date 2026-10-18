@@ -42,9 +42,17 @@ public class EnemyController : MonoBehaviour, IDamageable
     [Header("UI")]
     [SerializeField]private Slider healthBar;
 
+    [Header("Effects")]
+    [SerializeField] private ParticleSystem hitEffectPrefab;
+    [SerializeField] private AudioClip attackSound;
+    [SerializeField] private AudioClip hurtSound;
+    private AudioSource audioSource;
+
+
     private Coroutine attackCoroutine;
     private void Awake()
     {
+        audioSource = GetComponent<AudioSource>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         
@@ -101,11 +109,25 @@ public class EnemyController : MonoBehaviour, IDamageable
         {
             Die();
         }
+
+        if (hitEffectPrefab != null)
+        {
+            var fx = Instantiate(hitEffectPrefab, transform.position, Quaternion.identity);
+            Destroy(fx.gameObject, fx.main.duration + fx.main.startLifetime.constantMax);
+        }
+
+        if (hurtSound != null)
+        {
+                        audioSource.PlayOneShot(hurtSound);
+        }
+
     }
 
     public void Die()
     {
         StopAllCoroutines();
+
+        
 
         if (gameObject.layer == LayerMask.NameToLayer("Red"))
         {
