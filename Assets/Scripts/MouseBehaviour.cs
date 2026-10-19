@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Linq;
 using TMPro;
+using Unity.VectorGraphics;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -9,6 +10,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
+using static UnityEditor.Handles;
 
 public class MouseBehaviour : MonoBehaviour
 {
@@ -120,8 +122,5 @@ public class MouseBehaviour : MonoBehaviour
         
     }
 
-    public void EnableGizmos(bool enableGizmos)
-    {
-        
-    }
+
 }

@@ -14,6 +14,8 @@ public class PointManager : MonoBehaviour
     public TextMeshProUGUI redPointText;
     public TextMeshProUGUI bluePointText;
 
+    public bool pointsEnabled = true;
+    
     public float timeTillNextPoint = 1f;
     private float pointTimer = 0f;
         
@@ -38,7 +40,7 @@ public class PointManager : MonoBehaviour
     {
         pointTimer += Time.deltaTime;
 
-        if (pointTimer >= timeTillNextPoint)
+        if (pointTimer >= timeTillNextPoint && pointsEnabled)
         {
             AddPoints(automaticPoints, true);
             AddPoints(automaticPoints, false);
@@ -48,16 +50,19 @@ public class PointManager : MonoBehaviour
 
     public void AddPoints(float points, bool isRed)
     {
-        if (isRed)
+        if (pointsEnabled)
         {
-            redPoints += points;
-            redPointText.text = "Points: " + redPoints;
-        }
+            if (isRed)
+            {
+                redPoints += points;
+                redPointText.text = "Points: " + redPoints;
+            }
 
-        else
-        {
-            bluePoints += points;
-            bluePointText.text = "Points: " + bluePoints;
+            else
+            {
+                bluePoints += points;
+                bluePointText.text = "Points: " + bluePoints;
+            }
         }
 
     }

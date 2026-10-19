@@ -20,6 +20,8 @@ public class SpawnerScript : MonoBehaviour
 
     private LayerMask blueMask;
     private LayerMask redMask;
+    
+    public bool canSpawn = false;
 
     
     
@@ -33,25 +35,29 @@ public class SpawnerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GetKeyDown(KeyCode.Alpha1))
+        if (canSpawn)
         {
-            SetTeam(melee, true);
+            if (GetKeyDown(KeyCode.Alpha1))
+            {
+                SetTeam(melee, true);
+            }
+        
+            if (GetKeyDown(KeyCode.Alpha2))
+            {
+                SetTeam(melee, false);
+            }        
+        
+            if (GetKeyDown(KeyCode.Alpha3))
+            {
+                SetTeam(tank, true);
+            }
+        
+            if (GetKeyDown(KeyCode.Alpha4))
+            {
+                SetTeam(tank, false);
+            }
         }
         
-        if (GetKeyDown(KeyCode.Alpha2))
-        {
-            SetTeam(melee, false);
-        }        
-        
-        if (GetKeyDown(KeyCode.Alpha3))
-        {
-            SetTeam(tank, true);
-        }
-        
-        if (GetKeyDown(KeyCode.Alpha4))
-        {
-            SetTeam(tank, false);
-        }
     }
 
     void SpawnEnemy(GameObject enemy,  Vector3 spawnZone)
