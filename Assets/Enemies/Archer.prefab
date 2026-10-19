@@ -401,7 +401,7 @@ MonoBehaviour:
   damage: 2
   range: 15
   cooldown: 1.4
-  lootPoints: 38
+  lootPoints: 40
   visionRange: 10
   attackTimer: 0
   angleRange: 180
