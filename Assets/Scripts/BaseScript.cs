@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BaseScript : MonoBehaviour, IDamageable
 {
@@ -28,12 +29,12 @@ public class BaseScript : MonoBehaviour, IDamageable
 
         if (gameObject.layer == 6)
         {
-            
+            SceneManager.LoadScene(SceneManager.GetSceneByName("BlueVictory").buildIndex);
         }
 
         else
         {
-            
+            SceneManager.LoadScene(SceneManager.GetSceneByName("RedVictory").buildIndex);
         }
     }
 

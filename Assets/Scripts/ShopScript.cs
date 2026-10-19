@@ -6,45 +6,58 @@ public class ShopScript : MonoBehaviour
 {
     public SpawnerScript spawner;
 
-    public float meleeCost;
-    public float tankCost;
+    public GameObject[] enemies;
+    public float[] costs;
 
-    public bool isRed;
-
-    public GameObject melee;
-    public GameObject tank;
+    public bool isRed = true;
     
-    private void BuyUnit(float cost, GameObject unit)
+    private void BuyUnit(int unit)
     {
         if (isRed)
         {
-            if (PointManager.instance.redPoints >= cost)
+            if (PointManager.instance.redPoints >= costs[unit])
             {
-                spawner.SetTeam(unit, true);
-                PointManager.instance.SubtractPoints(cost, true);
+                spawner.SetTeam(enemies[unit], true);
+                PointManager.instance.SubtractPoints(costs[unit], true);
             }
         }
 
         else
         {
-            if (PointManager.instance.bluePoints >= cost)
+            if (PointManager.instance.bluePoints >= costs[unit])
             {
-                spawner.SetTeam(unit, false);
-                PointManager.instance.SubtractPoints(cost, false);
+                spawner.SetTeam(enemies[unit], false);
+                PointManager.instance.SubtractPoints(costs[unit], false);
             }
         }
 
     }
     
-    public void BuyMelee()
+    public void SetBlue()
     {
-        BuyUnit(meleeCost, melee);
-    }    
-    
-    public void BuyTank()
-    {
-        BuyUnit(tankCost, tank);
+        isRed = false;
     }
     
+    public void SetRed()
+    {
+        isRed = true;
+    }
+
+    public void BuyMelee()
+    {
+        BuyUnit(0);
+    }
+       
+    public void BuyTank()
+    {
+        BuyUnit(1);
+    }
+        
+    public void BuyArcher()
+    {
+        BuyUnit(2);
+    }
+
+
     
 }

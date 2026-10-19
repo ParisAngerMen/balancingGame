@@ -19,7 +19,7 @@ public class MouseBehaviour : MonoBehaviour
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI enemySeen;
-    public TextMeshProUGUI attackCooldown;
+    public TextMeshProUGUI currentState;
     public TextMeshProUGUI teamName;
 
     private void Awake()
@@ -36,7 +36,7 @@ public class MouseBehaviour : MonoBehaviour
             if (hit.collider.CompareTag("Enemy"))
             {
                 enemySeen.enabled = true;
-                attackCooldown.enabled = true;
+                currentState.enabled = true;
                 
                 StartCoroutine(EnemyStatNames(hit));
             }
@@ -44,7 +44,7 @@ public class MouseBehaviour : MonoBehaviour
             if (hit.collider.CompareTag("RedBase") || hit.collider.CompareTag("BlueBase"))
             {
                 enemySeen.enabled = false;
-                attackCooldown.enabled = false;
+                currentState.enabled = false;
                 
                 StartCoroutine(BaseStatNames(hit));
             }
@@ -71,7 +71,7 @@ public class MouseBehaviour : MonoBehaviour
             
                 nameText.text = enemy.name;
                 healthText.text = "Health: " + enemy.GetComponent<IDamageable>().currentHealth;
-                attackCooldown.text = "Time until next attack: " + enemy.GetComponent<EnemyController>().attackTimer;
+                currentState.text = "Attack timer: " + enemy.GetComponent<EnemyController>().attackTimer;
                 teamName.text = "Layer: " + enemy.layer;
 
                 if (enemy.GetComponent<EnemyController>().enemyHit != null)

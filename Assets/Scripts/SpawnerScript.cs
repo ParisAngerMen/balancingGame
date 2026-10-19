@@ -4,8 +4,7 @@ using static UnityEngine.Input;
 
 public class SpawnerScript : MonoBehaviour
 {
-    public GameObject melee;
-    public GameObject tank;
+    public GameObject[] enemies;
     
     public Transform blueSpawnZone;
     public Transform redSpawnZone;
@@ -22,8 +21,10 @@ public class SpawnerScript : MonoBehaviour
     private LayerMask redMask;
     
     public bool canSpawn = false;
+    public bool enableAutoSpawn = false;
 
-    
+    public float timeToSpawn = 3f;
+    public float spawnTimer = 0f;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -39,23 +40,38 @@ public class SpawnerScript : MonoBehaviour
         {
             if (GetKeyDown(KeyCode.Alpha1))
             {
-                SetTeam(melee, true);
+                SetTeam(enemies[0], true);
             }
         
             if (GetKeyDown(KeyCode.Alpha2))
             {
-                SetTeam(melee, false);
+                SetTeam(enemies[0], false);
             }        
         
             if (GetKeyDown(KeyCode.Alpha3))
             {
-                SetTeam(tank, true);
+                SetTeam(enemies[1], true);
             }
         
             if (GetKeyDown(KeyCode.Alpha4))
             {
-                SetTeam(tank, false);
+                SetTeam(enemies[1], false);
             }
+
+            if (GetKeyDown(KeyCode.Alpha5))
+            {
+                SetTeam(enemies[2], true);
+            }            
+            
+            if (GetKeyDown(KeyCode.Alpha6))
+            {
+                SetTeam(enemies[2], false);
+            }
+        }
+
+        if (enableAutoSpawn)
+        {
+            SpawnRedEnemies();
         }
         
     }
@@ -104,6 +120,18 @@ public class SpawnerScript : MonoBehaviour
         else
         {
             CalculateSpawnPoint(enemy, spawnZone);
+        }
+    }
+
+    void SpawnRedEnemies()
+    {
+        spawnTimer += Time.deltaTime;
+        
+        if (spawnTimer >= timeToSpawn)
+        {
+            int randomEnemy = Random.Range(0, enemies.Length);
+            SetTeam(enemies[randomEnemy].gameObject, true);
+            spawnTimer = 0f;
         }
     }
 }

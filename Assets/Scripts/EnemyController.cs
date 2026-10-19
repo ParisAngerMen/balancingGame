@@ -29,6 +29,7 @@ public class EnemyController : MonoBehaviour, IDamageable
     [Header("Other Variables")]
     [SerializeField] private float visionRange;
     public float attackTimer = 0f;
+    private bool isAttacking = false;
     [SerializeField] private float angleRange;
     [SerializeField] private float rotSpeed;
 
@@ -48,7 +49,8 @@ public class EnemyController : MonoBehaviour, IDamageable
     [SerializeField] private AudioClip hurtSound;
     private AudioSource audioSource;
 
-
+    
+    
     protected Coroutine attackCoroutine;
     private void Awake()
     {
@@ -64,7 +66,6 @@ public class EnemyController : MonoBehaviour, IDamageable
         else if (gameObject.layer == LayerMask.NameToLayer("Red"))
         {
             enemyBase = GameObject.FindGameObjectWithTag("BlueBase");
-
         }
         
     }
@@ -92,7 +93,16 @@ public class EnemyController : MonoBehaviour, IDamageable
 
     private void Update()
     {
+        if (isAttacking)
+        {
+            attackTimer += Time.deltaTime;
+            Debug.Log("Time to attack: " + attackTimer);
 
+            if (attackTimer >= cooldown)
+            {
+                attackTimer = 0;
+            }
+        }
     }
 
     public void TakeDamage(float damage)
@@ -174,7 +184,8 @@ public class EnemyController : MonoBehaviour, IDamageable
                         animator.SetBool("attack", true);
                         
                         attackCoroutine = StartCoroutine(Attack(enemyHit));
-                        StartCoroutine(AttackTime(enemyHit));
+                        isAttacking = true;
+
                     }
                     
                 }
@@ -225,6 +236,7 @@ public class EnemyController : MonoBehaviour, IDamageable
                 }
 
                 attackTimer = 0f;
+                isAttacking = false;
                 attackCoroutine = null;
                 animator.SetBool("attack", false);
                 navMeshAgent.updateRotation = true;
@@ -256,8 +268,10 @@ public class EnemyController : MonoBehaviour, IDamageable
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, range);
 
-        
-        
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireCube(navMeshAgent.destination, Vector3.one);
+        Gizmos.DrawLine(transform.position, navMeshAgent.destination);
+
     }
 }
 
