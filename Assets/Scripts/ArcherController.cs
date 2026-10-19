@@ -56,6 +56,39 @@ public class ArcherController : EnemyController
         }
     }
 
+    private float nextDebug;
+
+    private void Update()
+    {
+        if (enemyBase == null)
+        {
+            if (Time.time > nextDebug)
+            {
+                nextDebug = Time.time + 1f;
+                Debug.LogError(name + ": enemyBase es NULL (revisa el tag de la base)");
+            }
+            return;
+        }
+
+        Collider col = enemyBase.GetComponentInChildren<Collider>();
+        Vector3 closest = col != null ? col.ClosestPoint(transform.position) : enemyBase.transform.position;
+        float dist = Vector3.Distance(transform.position, closest);
+        float allowed = navMeshAgent.stoppingDistance + 2f;
+
+        if (Time.time > nextDebug)
+        {
+            nextDebug = Time.time + 1f;
+            Debug.Log($"{name} -> base: {enemyBase.name} | collider: {(col != null ? col.GetType().Name : "NINGUNO")} " +
+                      $"| dist: {dist:F1} / permitido: {allowed:F1} | path: {navMeshAgent.pathStatus} " +
+                      $"| attackCoroutine null: {attackCoroutine == null}");
+        }
+
+        if (attackCoroutine == null && dist <= allowed)
+        {
+            enemyHit = enemyBase;
+            attackCoroutine = StartCoroutine(Attack(enemyBase));
+        }
+    }
     private void Shoot(GameObject target)
     {
         Debug.Log("Shoot called");
