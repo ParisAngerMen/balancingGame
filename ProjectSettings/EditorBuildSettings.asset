@@ -8,5 +8,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GameplayScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/BlueVictory.unity
+    guid: f69233a6f870cb1438ef5651dd3ddaaa
+  - enabled: 1
+    path: Assets/Scenes/RedVictory.unity
+    guid: 7b0e40adcd462514dbe8e8d023a4357b
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

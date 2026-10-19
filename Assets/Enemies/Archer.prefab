@@ -239,7 +239,7 @@ GameObject:
   - component: {fileID: 2382914264945682958}
   - component: {fileID: 5851706208272199968}
   - component: {fileID: 7847297808099227432}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Archer
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -297,7 +297,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d2930f92d40ae764ea6f20947856271b, type: 2}
+  - {fileID: 2100000, guid: ac920a1e5dee4cd4089f38664556f581, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -410,7 +410,7 @@ MonoBehaviour:
   navMeshAgent: {fileID: 0}
   enemyMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 128
   healthBar: {fileID: 6221340738123632839}
   hitEffectPrefab: {fileID: 82963762037251579, guid: 5b3d25cf329dec942bf3e504d02ecd79, type: 3}
   attackSound: {fileID: 8300000, guid: 4395ba467ece81645bb639b6301ef666, type: 3}

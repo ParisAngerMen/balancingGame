@@ -27,14 +27,14 @@ public class BaseScript : MonoBehaviour, IDamageable
     {
         Destroy(gameObject);
 
-        if (gameObject.layer == 6)
+        if (gameObject.layer == 6) // 6 is blue layer
         {
-            SceneManager.LoadScene(SceneManager.GetSceneByName("BlueVictory").buildIndex);
+            SceneManager.LoadScene("BlueVictory");
         }
 
         else
         {
-            SceneManager.LoadScene(SceneManager.GetSceneByName("RedVictory").buildIndex);
+            SceneManager.LoadScene("RedVictory");
         }
     }
 
