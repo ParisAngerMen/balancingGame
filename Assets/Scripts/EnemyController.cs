@@ -49,7 +49,7 @@ public class EnemyController : MonoBehaviour, IDamageable
     private AudioSource audioSource;
 
 
-    private Coroutine attackCoroutine;
+    protected Coroutine attackCoroutine;
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
@@ -234,6 +234,12 @@ public class EnemyController : MonoBehaviour, IDamageable
             
             
             IDamageable damageable = target.GetComponent<IDamageable>();
+
+            if (attackSound != null)
+            {
+                audioSource.PlayOneShot(attackSound);
+            }
+
             damageable.TakeDamage(damage);
             
             attackTimer = 0f;

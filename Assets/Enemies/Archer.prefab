@@ -37,7 +37,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0.72000027}
+  m_AnchoredPosition: {x: 0, y: 1.39}
   m_SizeDelta: {x: 876, y: 493}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &5522864959420035618
@@ -191,6 +191,37 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &5383504281958228384
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6427095532227151989}
+  m_Layer: 7
+  m_Name: Firepoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6427095532227151989
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5383504281958228384}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0.95}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2460644718762419034}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5441500299126889127
 GameObject:
   m_ObjectHideFlags: 0
@@ -227,6 +258,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5926511837278997282}
+  - {fileID: 6427095532227151989}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5157977255337151563
@@ -367,7 +399,6 @@ MonoBehaviour:
   range: 5
   cooldown: 0.7
   lootPoints: 0
-  pointsToBuy: 0
   visionRange: 10
   attackTimer: 0
   angleRange: 180
@@ -378,6 +409,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   healthBar: {fileID: 6221340738123632839}
+  hitEffectPrefab: {fileID: 82963762037251579, guid: 5b3d25cf329dec942bf3e504d02ecd79, type: 3}
+  attackSound: {fileID: 8300000, guid: 4395ba467ece81645bb639b6301ef666, type: 3}
+  hurtSound: {fileID: 8300000, guid: 5dedaf233a679c64ba9d8e4010c95afc, type: 3}
+  arrowPrefab: {fileID: 4257438519850592543, guid: 89b4712b8193b244b8166b91a5a48a64, type: 3}
+  firePoint: {fileID: 6427095532227151989}
+  turnspeed: 10
 --- !u!1 &5878018149619692215
 GameObject:
   m_ObjectHideFlags: 0
