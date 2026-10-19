@@ -207,7 +207,7 @@ GameObject:
   - component: {fileID: -4095821640986451817}
   - component: {fileID: -3847835039419856886}
   - component: {fileID: 7192480771495308330}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Tank
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -256,7 +256,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d2930f92d40ae764ea6f20947856271b, type: 2}
+  - {fileID: 2100000, guid: ac920a1e5dee4cd4089f38664556f581, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -321,7 +321,7 @@ MonoBehaviour:
   damage: 6
   range: 5
   cooldown: 2.1
-  lootPoints: 30
+  lootPoints: 50
   visionRange: 10
   attackTimer: 0
   angleRange: 180
@@ -330,7 +330,7 @@ MonoBehaviour:
   navMeshAgent: {fileID: 0}
   enemyMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 128
   healthBar: {fileID: 3041881513098610649}
   hitEffectPrefab: {fileID: 82963762037251579, guid: 5b3d25cf329dec942bf3e504d02ecd79, type: 3}
   attackSound: {fileID: 8300000, guid: 9865e417a58f5c948a058abd0d29a1c0, type: 3}
