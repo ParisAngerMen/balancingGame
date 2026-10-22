@@ -13,6 +13,11 @@ public class ArcherController : EnemyController
     [SerializeField] private Transform firePoint;
     [SerializeField] private float turnspeed = 10f;
 
+    public override void SetAttack()
+    {
+        AttackState = new ArcherAttack(this, StateMachine);
+    }
+    
     public override IEnumerator Attack(GameObject target)
     {
         while (true)
@@ -27,6 +32,8 @@ public class ArcherController : EnemyController
 
                 attackTimer = 0f;
                 attackCoroutine = null;
+                Debug.Log("Seeing no enemy");
+                yield return SightCheck();
                 yield break;
             }
 

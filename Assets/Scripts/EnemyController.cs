@@ -1,9 +1,8 @@
-using System;
 using System.Collections;
-using UnityEditor.Experimental.GraphView;
-using UnityEditor.Searcher;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.TestTools;
 using UnityEngine.UI;
 
 public class EnemyController : MonoBehaviour, IDamageable
@@ -32,31 +31,34 @@ public class EnemyController : MonoBehaviour, IDamageable
     private bool isAttacking = false;
     [SerializeField] private float angleRange;
     [SerializeField] private float rotSpeed;
-
-    
-    [Header("Other Components")]
     public GameObject enemyHit;
     public NavMeshAgent navMeshAgent;
     public LayerMask enemyMask;
     private Animator animator;
 
+    [Header("Enemy States")] 
+    public EnemyStateMachine StateMachine { get; set; }
+    public EnemyState WalkState { get; set; }
+    [SerializeField] public EnemyState AttackState;
+
+    
     [Header("UI")]
     [SerializeField]private Slider healthBar;
 
     [Header("Effects")]
     [SerializeField] private ParticleSystem hitEffectPrefab;
-    [SerializeField] private AudioClip attackSound;
-    [SerializeField] private AudioClip hurtSound;
+    [SerializeField] public AudioClip attackSound;
+    [SerializeField] public AudioClip hurtSound;
     private AudioSource audioSource;
-
-    
-    
     protected Coroutine attackCoroutine;
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+        
+        WalkState = new EnemyWalkState(this, StateMachine);
+        SetAttack();
         
         if (gameObject.layer == LayerMask.NameToLayer("Blue"))
         {
@@ -68,14 +70,25 @@ public class EnemyController : MonoBehaviour, IDamageable
             enemyBase = GameObject.FindGameObjectWithTag("BlueBase");
         }
         
+        StateMachine = new EnemyStateMachine();
+        
     }
 
+    public virtual void SetAttack()
+    {
+        AttackState = new EnemyAttackState(this, StateMachine);
+    }
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         enemyHit = enemyBase;
         currentHealth = maxHealth;
+        
+        Debug.Log("Enemy Base: " + enemyBase);
 
+        StateMachine.Initialize(WalkState);
+        
         if(healthBar != null)
         {
             healthBar.maxValue = maxHealth;
@@ -84,15 +97,13 @@ public class EnemyController : MonoBehaviour, IDamageable
 
         navMeshAgent.speed = speed;
         navMeshAgent.stoppingDistance = range;
-        
-        //navMeshAgent.updateRotation = false;
-        navMeshAgent.SetDestination(enemyBase.transform.position);
         StartCoroutine(SightCheck());
 
     }
-
+    
     private void Update()
     {
+        /*
         if (isAttacking)
         {
             attackTimer += Time.deltaTime;
@@ -103,6 +114,20 @@ public class EnemyController : MonoBehaviour, IDamageable
                 attackTimer = 0;
             }
         }
+        */
+        
+        StateMachine.CurrentEnemyState.FrameUpdate();
+    }
+    
+    
+    public enum AnimationTriggerType
+    {
+        WalkAnimation,
+        AttackAnimation
+    }
+    private void AnimationTriggerEvent(AnimationTriggerType triggerType)
+    {
+        StateMachine.CurrentEnemyState.AnimationTriggerEvent(triggerType);
     }
 
     public void TakeDamage(float damage)
@@ -128,7 +153,7 @@ public class EnemyController : MonoBehaviour, IDamageable
 
         if (hurtSound != null)
         {
-                        audioSource.PlayOneShot(hurtSound);
+            audioSource.PlayOneShot(hurtSound);
         }
 
     }
@@ -136,8 +161,6 @@ public class EnemyController : MonoBehaviour, IDamageable
     public void Die()
     {
         StopAllCoroutines();
-
-        
 
         if (gameObject.layer == LayerMask.NameToLayer("Red"))
         {
@@ -169,6 +192,7 @@ public class EnemyController : MonoBehaviour, IDamageable
                     Vector3.Distance(transform.position, navMeshAgent.destination) && 
                     hit.gameObject.CompareTag("Enemy"))
                 {
+                    Debug.Log("Seeing two enemies. Abort.");
                     yield break;
                 } 
 
@@ -176,6 +200,10 @@ public class EnemyController : MonoBehaviour, IDamageable
                 
                 if (angle < angleRange)
                 {
+                    enemyHit = hit.gameObject;
+                    StateMachine.ChangeState(AttackState);
+                    
+                    /*
                     if (attackCoroutine == null)
                     {
                         enemyHit = hit.gameObject;
@@ -187,14 +215,17 @@ public class EnemyController : MonoBehaviour, IDamageable
                         isAttacking = true;
 
                     }
+                    */
                     
                 }
 
                 else
                 {
+                    /*
                     enemyHit = enemyBase;
                     StopCoroutine(Attack(hit.gameObject));
-                    navMeshAgent.SetDestination(enemyBase.transform.position);
+                    */
+                    StateMachine.ChangeState(WalkState);
                 }
 
             }
@@ -225,10 +256,8 @@ public class EnemyController : MonoBehaviour, IDamageable
     {
         while (true)
         {
-            
             if (target == null)
             {
-                
                 if (enemyBase != null)
                 {
                     enemyHit = enemyBase;
