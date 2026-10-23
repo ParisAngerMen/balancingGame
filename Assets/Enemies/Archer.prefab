@@ -239,6 +239,7 @@ GameObject:
   - component: {fileID: 2382914264945682958}
   - component: {fileID: 5851706208272199968}
   - component: {fileID: 7847297808099227432}
+  - component: {fileID: 2866301547191001765}
   m_Layer: 6
   m_Name: Archer
   m_TagString: Enemy
@@ -537,6 +538,20 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &2866301547191001765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5441500299126889127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 981fdbc699bd6674886bddab69c6b661, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MaterialAdder
+  blueMaterial: {fileID: 2100000, guid: 11eb3dcddc2caf841be667ee79b4f7d1, type: 2}
+  redMaterial: {fileID: 2100000, guid: ac920a1e5dee4cd4089f38664556f581, type: 2}
 --- !u!1 &5878018149619692215
 GameObject:
   m_ObjectHideFlags: 0

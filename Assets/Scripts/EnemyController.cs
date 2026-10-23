@@ -97,8 +97,7 @@ public class EnemyController : MonoBehaviour, IDamageable
 
         navMeshAgent.speed = speed;
         navMeshAgent.stoppingDistance = range;
-        StartCoroutine(SightCheck());
-
+        StartSight();
     }
     
     private void Update()
@@ -165,6 +164,11 @@ public class EnemyController : MonoBehaviour, IDamageable
         Destroy(gameObject);
     }
 
+    public void StartSight()
+    {
+        StartCoroutine(SightCheck());
+    }
+
     public IEnumerator SightCheck()
     {
         while (true)
@@ -172,19 +176,20 @@ public class EnemyController : MonoBehaviour, IDamageable
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, visionRange, enemyMask,
                 QueryTriggerInteraction.Collide);
             
-
             foreach (Collider hit in hitColliders)
             {
                 Vector3 hitPoint = hit.transform.position;
                 Vector3 targetDirection = hitPoint - transform.position;
 
+                /*
                 if (Vector3.Distance(transform.position, hitPoint) > 
-                    Vector3.Distance(transform.position, navMeshAgent.destination) && 
-                    hit.gameObject.CompareTag("Enemy"))
+                    Vector3.Distance(transform.position, navMeshAgent.destination) 
+                    && hit.gameObject.CompareTag("Enemy"))
                 {
                     Debug.Log("Seeing two enemies. Abort.");
                     yield break;
                 } 
+                */
 
                 float angle = Vector3.Angle(targetDirection, transform.forward);
                 
@@ -192,29 +197,10 @@ public class EnemyController : MonoBehaviour, IDamageable
                 {
                     enemyHit = hit.gameObject;
                     StateMachine.ChangeState(AttackState);
-                    
-                    /*
-                    if (attackCoroutine == null)
-                    {
-                        enemyHit = hit.gameObject;
-                        navMeshAgent.SetDestination(hitPoint);
-                        navMeshAgent.updateRotation = false;
-                        animator.SetBool("attack", true);
-                        
-                        attackCoroutine = StartCoroutine(Attack(enemyHit));
-                        isAttacking = true;
-
-                    }
-                    */
-                    
                 }
 
                 else
                 {
-                    /*
-                    enemyHit = enemyBase;
-                    StopCoroutine(Attack(hit.gameObject));
-                    */
                     StateMachine.ChangeState(WalkState);
                 }
 

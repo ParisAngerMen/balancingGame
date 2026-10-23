@@ -13,7 +13,7 @@ public class EnemyAttackState : EnemyState
     {
         audioSource = enemy.gameObject.GetComponent<AudioSource>();
         animator = enemy.gameObject.GetComponent<Animator>();
-        
+
     }
 
     public override void EnterState()
@@ -34,7 +34,6 @@ public class EnemyAttackState : EnemyState
     {
         if (enemy.enemyHit == null)
         {
-            Debug.Log("Enemy missing. Return to walking.");
             ExitState();
             return;
         }

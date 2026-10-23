@@ -9,7 +9,11 @@ public class ArcherAttack : EnemyAttackState
 
     public override void FrameUpdate()
     {
-        
+        if (enemy.enemyHit == null)
+        {
+            ExitState();
+            return;
+        }
     }
 
     public override void PhysicsUpdate()

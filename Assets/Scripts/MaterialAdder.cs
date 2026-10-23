@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class MaterialAdder : MonoBehaviour
 {
-    public SkinnedMeshRenderer[] skinnedMeshRenderer;
+    private SkinnedMeshRenderer[] skinnedMeshRenderer;
     private GameObject[] bodyParts;
 
     public Material blueMaterial;
