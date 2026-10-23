@@ -84,23 +84,22 @@ public class SpawnerScript : MonoBehaviour
 
     public void SetTeam(GameObject enemy, bool isRed)
     {
+        EnemyController enemyController = enemy.GetComponent<EnemyController>();
+        MaterialAdder materialAdder = enemy.GetComponent<MaterialAdder>();
+        
         if (isRed)
         {
-            enemy.GetComponent<EnemyController>().enemyMask = blueMask;
+            enemyController.enemyMask = blueMask;
             enemy.layer = LayerMask.NameToLayer("Red");
-            meshRenderer = enemy.GetComponent<MeshRenderer>();
             
-            meshRenderer.material = red;
             CalculateSpawnPoint(enemy, redSpawnZone);
         }
 
         else
         {
-            enemy.GetComponent<EnemyController>().enemyMask = redMask;  
+            enemyController.enemyMask = redMask;  
             enemy.layer = LayerMask.NameToLayer("Blue");
-            meshRenderer = enemy.GetComponent<MeshRenderer>();
-            
-            meshRenderer.material = blue;
+
             CalculateSpawnPoint(enemy, blueSpawnZone);
 
         }

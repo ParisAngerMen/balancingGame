@@ -119,16 +119,6 @@ public class EnemyController : MonoBehaviour, IDamageable
         StateMachine.CurrentEnemyState.FrameUpdate();
     }
     
-    
-    public enum AnimationTriggerType
-    {
-        WalkAnimation,
-        AttackAnimation
-    }
-    private void AnimationTriggerEvent(AnimationTriggerType triggerType)
-    {
-        StateMachine.CurrentEnemyState.AnimationTriggerEvent(triggerType);
-    }
 
     public void TakeDamage(float damage)
     {

@@ -6,27 +6,39 @@ using UnityEngine.U2D;
 public class EnemyAttackState : EnemyState
 {
     private AudioSource audioSource;
+    private Animator animator;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public EnemyAttackState(EnemyController enemy, EnemyStateMachine enemyStateMachine) : base(enemy, enemyStateMachine)
     {
         audioSource = enemy.gameObject.GetComponent<AudioSource>();
+        animator = enemy.gameObject.GetComponent<Animator>();
+        
     }
 
     public override void EnterState()
     {
         enemy.navMeshAgent.SetDestination(enemy.enemyHit.transform.position);
+        animator.SetBool("attack", true);
         enemy.navMeshAgent.updateRotation = false;
     }
 
     public override void ExitState()
     {
         enemy.navMeshAgent.SetDestination(enemy.enemyBase.transform.position);
+        animator.SetBool("attack", false);
         enemy.navMeshAgent.updateRotation = true;
     }
 
     public override void FrameUpdate()
     {
+        if (enemy.enemyHit == null)
+        {
+            Debug.Log("Enemy missing. Return to walking.");
+            ExitState();
+            return;
+        }
+        
         enemy.gameObject.transform.LookAt(enemy.enemyHit.transform);
         
         enemy.attackTimer += Time.deltaTime;
@@ -52,12 +64,6 @@ public class EnemyAttackState : EnemyState
     {
         base.PhysicsUpdate();
     }
-
-    public override void AnimationTriggerEvent(EnemyController.AnimationTriggerType triggerType)
-    {
-        base.AnimationTriggerEvent(triggerType);
-    }
-    
     
 /*
     

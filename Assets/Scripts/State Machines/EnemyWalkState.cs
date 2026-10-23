@@ -34,9 +34,5 @@ public class EnemyWalkState : EnemyState
     {
         base.PhysicsUpdate();
     }
-
-    public override void AnimationTriggerEvent(EnemyController.AnimationTriggerType triggerType)
-    {
-        base.AnimationTriggerEvent(triggerType);
-    }
+    
 }

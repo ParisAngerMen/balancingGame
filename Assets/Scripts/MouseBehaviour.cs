@@ -18,6 +18,7 @@ public class MouseBehaviour : MonoBehaviour
     
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI healthText;
+    public TextMeshProUGUI attackTimer;
     public TextMeshProUGUI enemySeen;
     public TextMeshProUGUI currentState;
     public TextMeshProUGUI teamName;
@@ -71,8 +72,9 @@ public class MouseBehaviour : MonoBehaviour
             
                 nameText.text = enemy.name;
                 healthText.text = "Health: " + enemy.GetComponent<IDamageable>().currentHealth;
-                currentState.text = "Attack timer: " + enemy.GetComponent<EnemyController>().attackTimer;
+                attackTimer.text = "Attack timer: " + enemy.GetComponent<EnemyController>().attackTimer;
                 teamName.text = "Layer: " + enemy.layer;
+                currentState.text = "Current State: " + enemy.GetComponent<EnemyController>().StateMachine.CurrentEnemyState;
 
                 if (enemy.GetComponent<EnemyController>().enemyHit != null)
                 {

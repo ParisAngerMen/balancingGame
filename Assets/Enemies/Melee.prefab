@@ -282,6 +282,7 @@ GameObject:
   - component: {fileID: -4095821640986451817}
   - component: {fileID: -4077445722942244346}
   - component: {fileID: 5164620262394287605}
+  - component: {fileID: -6862584325092175032}
   m_Layer: 6
   m_Name: Melee
   m_TagString: Enemy
@@ -331,7 +332,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ac920a1e5dee4cd4089f38664556f581, type: 2}
+  - {fileID: 2100000, guid: d2930f92d40ae764ea6f20947856271b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -568,6 +569,21 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-6862584325092175032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5441500299126889127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 981fdbc699bd6674886bddab69c6b661, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MaterialAdder
+  skinnedMeshRenderer: []
+  blueMaterial: {fileID: 2100000, guid: d2930f92d40ae764ea6f20947856271b, type: 2}
+  redMaterial: {fileID: 2100000, guid: ac920a1e5dee4cd4089f38664556f581, type: 2}
 --- !u!1 &7261605925611341912
 GameObject:
   m_ObjectHideFlags: 0
@@ -741,10 +757,42 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -3086478328068027308, guid: a2f188afc5b868049943b65e33f92f08, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -3086478328068027308, guid: a2f188afc5b868049943b65e33f92f08, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1106563633393636324, guid: a2f188afc5b868049943b65e33f92f08, type: 3}
+    - target: {fileID: 415287891258781815, guid: a2f188afc5b868049943b65e33f92f08, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 415287891258781815, guid: a2f188afc5b868049943b65e33f92f08, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1106563633393636324, guid: a2f188afc5b868049943b65e33f92f08, type: 3}
+    - target: {fileID: 701420837181973649, guid: a2f188afc5b868049943b65e33f92f08, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 701420837181973649, guid: a2f188afc5b868049943b65e33f92f08, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1106563633393636324, guid: a2f188afc5b868049943b65e33f92f08, type: 3}
     - target: {fileID: 919132149155446097, guid: a2f188afc5b868049943b65e33f92f08, type: 3}
       propertyPath: m_Name
       value: Paladin WProp J Nordstrom
       objectReference: {fileID: 0}
+    - target: {fileID: 3099756089343826349, guid: a2f188afc5b868049943b65e33f92f08, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3099756089343826349, guid: a2f188afc5b868049943b65e33f92f08, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1106563633393636324, guid: a2f188afc5b868049943b65e33f92f08, type: 3}
     - target: {fileID: 5866666021909216657, guid: a2f188afc5b868049943b65e33f92f08, type: 3}
       propertyPath: m_Controller
       value: 
