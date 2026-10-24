@@ -208,7 +208,7 @@ GameObject:
   - component: {fileID: -3847835039419856886}
   - component: {fileID: 7192480771495308330}
   - component: {fileID: 1146378679556226143}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Tank
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -331,7 +331,7 @@ MonoBehaviour:
   navMeshAgent: {fileID: 0}
   enemyMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 128
   healthBar: {fileID: 3041881513098610649}
   hitEffectPrefab: {fileID: 82963762037251579, guid: 5b3d25cf329dec942bf3e504d02ecd79, type: 3}
   attackSound: {fileID: 8300000, guid: 9865e417a58f5c948a058abd0d29a1c0, type: 3}
