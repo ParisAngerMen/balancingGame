@@ -18,6 +18,7 @@ public class EnemyAttackState : EnemyState
 
     public override void EnterState()
     {
+        Debug.Log("Enter attack state");
         enemy.navMeshAgent.SetDestination(enemy.enemyHit.transform.position);
         animator.SetBool("attack", true);
         enemy.navMeshAgent.updateRotation = false;
@@ -25,6 +26,7 @@ public class EnemyAttackState : EnemyState
 
     public override void ExitState()
     {
+        Debug.Log("Exit attack state");
         enemy.navMeshAgent.SetDestination(enemy.enemyBase.transform.position);
         animator.SetBool("attack", false);
         enemy.navMeshAgent.updateRotation = true;
@@ -32,29 +34,34 @@ public class EnemyAttackState : EnemyState
 
     public override void FrameUpdate()
     {
-        if (enemy.enemyHit == null)
-        {
-            ExitState();
-            return;
-        }
-        
-        enemy.gameObject.transform.LookAt(enemy.enemyHit.transform);
-        
-        enemy.attackTimer += Time.deltaTime;
-        Debug.Log("Time to attack: " + enemy.attackTimer);
+        Debug.Log("Enemy hit: " + enemy.enemyHit);
 
-        if (enemy.attackTimer >= enemy.cooldown)
+        if (enemy.enemyHit != null)
         {
-            IDamageable damageable = enemy.enemyHit.GetComponent<IDamageable>();
+            enemy.gameObject.transform.LookAt(enemy.enemyHit.transform);
+        
+            enemy.attackTimer += Time.deltaTime;
+            Debug.Log("Time to attack: " + enemy.attackTimer);
 
-            if (enemy.attackSound != null)
+            if (enemy.attackTimer >= enemy.cooldown)
             {
-                audioSource.PlayOneShot(enemy.attackSound);
-            }
+                IDamageable damageable = enemy.enemyHit.GetComponent<IDamageable>();
 
-            damageable.TakeDamage(enemy.damage);
-            enemy.attackTimer = 0;
+                if (enemy.attackSound != null)
+                {
+                    audioSource.PlayOneShot(enemy.attackSound);
+                }
+
+                damageable.TakeDamage(enemy.damage);
+                enemy.attackTimer = 0;
+            }
         }
+
+        else
+        {
+            enemy.ChangeToWalkState();
+        }
+        
         
     }
     

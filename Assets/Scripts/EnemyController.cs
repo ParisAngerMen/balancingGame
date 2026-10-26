@@ -78,6 +78,11 @@ public class EnemyController : MonoBehaviour, IDamageable
     {
         AttackState = new EnemyAttackState(this, StateMachine);
     }
+
+    public void ChangeToWalkState()
+    {
+        StateMachine.ChangeState(WalkState);
+    }
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -102,19 +107,7 @@ public class EnemyController : MonoBehaviour, IDamageable
     
     private void Update()
     {
-        /*
-        if (isAttacking)
-        {
-            attackTimer += Time.deltaTime;
-            Debug.Log("Time to attack: " + attackTimer);
-
-            if (attackTimer >= cooldown)
-            {
-                attackTimer = 0;
-            }
-        }
-        */
-        
+        Debug.Log("EnemyState: " + StateMachine.CurrentEnemyState);
         StateMachine.CurrentEnemyState.FrameUpdate();
     }
     
@@ -173,6 +166,7 @@ public class EnemyController : MonoBehaviour, IDamageable
     {
         while (true)
         {
+            
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, visionRange, enemyMask,
                 QueryTriggerInteraction.Collide);
             
@@ -181,89 +175,21 @@ public class EnemyController : MonoBehaviour, IDamageable
                 Vector3 hitPoint = hit.transform.position;
                 Vector3 targetDirection = hitPoint - transform.position;
 
-                /*
-                if (Vector3.Distance(transform.position, hitPoint) > 
-                    Vector3.Distance(transform.position, navMeshAgent.destination) 
-                    && hit.gameObject.CompareTag("Enemy"))
-                {
-                    Debug.Log("Seeing two enemies. Abort.");
-                    yield break;
-                } 
-                */
-
                 float angle = Vector3.Angle(targetDirection, transform.forward);
                 
                 if (angle < angleRange)
                 {
+                    Debug.Log("Angle: " + angle);
                     enemyHit = hit.gameObject;
                     StateMachine.ChangeState(AttackState);
                 }
-
-                else
-                {
-                    StateMachine.ChangeState(WalkState);
-                }
-
             }
             yield return new WaitForSeconds(0.1f);
 
         }
         
     }
-
-    public IEnumerator AttackTime(GameObject target)
-    {
-        while (true)
-        {
-            if (target != null)
-            {
-                transform.LookAt(target.transform);
-            }
-
-            else
-            {
-                yield break;
-            }
-            yield return new WaitForEndOfFrame();
-        }
-    }
     
-    public virtual IEnumerator Attack(GameObject target)
-    {
-        while (true)
-        {
-            if (target == null)
-            {
-                if (enemyBase != null)
-                {
-                    enemyHit = enemyBase;
-                    navMeshAgent.destination = enemyBase.transform.position;
-                }
-
-                attackTimer = 0f;
-                isAttacking = false;
-                attackCoroutine = null;
-                animator.SetBool("attack", false);
-                navMeshAgent.updateRotation = true;
-                yield return SightCheck();
-                yield break;
-            }
-            
-            
-            IDamageable damageable = target.GetComponent<IDamageable>();
-
-            if (attackSound != null)
-            {
-                audioSource.PlayOneShot(attackSound);
-            }
-
-            damageable.TakeDamage(damage);
-            
-            attackTimer = 0f;
-            
-            yield return new WaitForSeconds(cooldown);
-        }
-    }
 
     private void OnDrawGizmosSelected()
     {
