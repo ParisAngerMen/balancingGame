@@ -413,11 +413,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 875543f989b3c9e4c868d11025102f78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitStats
-  speed: 0
-  health: 0
-  damage: 0
-  range: 0
-  cooldown: 0
+  speed: 5
+  health: 15
+  damage: 2
+  range: 5
+  cooldown: 2.1
 --- !u!95 &-4077445722942244346
 Animator:
   serializedVersion: 7
