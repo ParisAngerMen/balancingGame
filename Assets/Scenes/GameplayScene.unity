@@ -2573,7 +2573,6 @@ MonoBehaviour:
   - {fileID: 5441500299126889127, guid: 526abecb67e608340b414e6ce76c5b67, type: 3}
   - {fileID: 5441500299126889127, guid: 93842ffab8907d5429143731a9616923, type: 3}
   - {fileID: 5441500299126889127, guid: ffb22c06d0c22914db44317bfc4e3f58, type: 3}
-  - {fileID: 5441500299126889127, guid: 6bd90d249bb6d0f45b7f383617a68532, type: 3}
   blueSpawnZone: {fileID: 1017333090}
   redSpawnZone: {fileID: 977434918}
   red: {fileID: 2100000, guid: ac920a1e5dee4cd4089f38664556f581, type: 2}

@@ -18,7 +18,6 @@ public class EnemyAttackState : EnemyState
 
     public override void EnterState()
     {
-        Debug.Log("Enter attack state");
         enemy.navMeshAgent.SetDestination(enemy.enemyHit.transform.position);
         animator.SetBool("attack", true);
         enemy.navMeshAgent.updateRotation = false;
@@ -26,7 +25,6 @@ public class EnemyAttackState : EnemyState
 
     public override void ExitState()
     {
-        Debug.Log("Exit attack state");
         enemy.navMeshAgent.SetDestination(enemy.enemyBase.transform.position);
         animator.SetBool("attack", false);
         enemy.navMeshAgent.updateRotation = true;
@@ -34,34 +32,29 @@ public class EnemyAttackState : EnemyState
 
     public override void FrameUpdate()
     {
-        Debug.Log("Enemy hit: " + enemy.enemyHit);
-
-        if (enemy.enemyHit != null)
+        if (enemy.enemyHit == null)
         {
-            enemy.gameObject.transform.LookAt(enemy.enemyHit.transform);
+            ExitState();
+            return;
+        }
         
-            enemy.attackTimer += Time.deltaTime;
-            Debug.Log("Time to attack: " + enemy.attackTimer);
+        enemy.gameObject.transform.LookAt(enemy.enemyHit.transform);
+        
+        enemy.attackTimer += Time.deltaTime;
+        Debug.Log("Time to attack: " + enemy.attackTimer);
 
-            if (enemy.attackTimer >= enemy.cooldown)
+        if (enemy.attackTimer >= enemy.cooldown)
+        {
+            IDamageable damageable = enemy.enemyHit.GetComponent<IDamageable>();
+
+            if (enemy.attackSound != null)
             {
-                IDamageable damageable = enemy.enemyHit.GetComponent<IDamageable>();
-
-                if (enemy.attackSound != null)
-                {
-                    audioSource.PlayOneShot(enemy.attackSound);
-                }
-
-                damageable.TakeDamage(enemy.damage);
-                enemy.attackTimer = 0;
+                audioSource.PlayOneShot(enemy.attackSound);
             }
-        }
 
-        else
-        {
-            enemy.ChangeToWalkState();
+            damageable.TakeDamage(enemy.damage);
+            enemy.attackTimer = 0;
         }
-        
         
     }
     

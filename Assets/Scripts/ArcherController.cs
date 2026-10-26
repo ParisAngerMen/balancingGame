@@ -18,7 +18,85 @@ public class ArcherController : EnemyController
         AttackState = new ArcherAttack(this, StateMachine);
     }
     
-    public void Shoot(GameObject target)
+    public override IEnumerator Attack(GameObject target)
+    {
+        while (true)
+        {
+            if (target == null)
+            {
+                if (enemyBase != null)
+                {
+                    enemyHit = enemyBase;
+                    navMeshAgent.SetDestination(enemyBase.transform.position);
+                }
+
+                attackTimer = 0f;
+                attackCoroutine = null;
+                Debug.Log("Seeing no enemy");
+                yield return SightCheck();
+                yield break;
+            }
+
+            Vector3 dir = target.transform.position - transform.position;
+            dir.y = 0f;
+            if (dir.sqrMagnitude > 0.01f)
+            {
+                transform.rotation = Quaternion.Slerp(
+                    transform.rotation,
+                    Quaternion.LookRotation(dir),
+                    turnspeed * Time.deltaTime);
+            }
+
+            float dist = Vector3.Distance(transform.position, target.transform.position);
+            if (dist <= navMeshAgent.stoppingDistance + 2f)
+            {
+                attackTimer += Time.deltaTime;
+
+                if (attackTimer >= cooldown)
+                {
+                    Shoot(target);
+                    attackTimer = 0f;
+                }
+            }
+
+            yield return null;
+        }
+    }
+
+    private float nextDebug;
+
+    private void Update()
+    {
+        if (enemyBase == null)
+        {
+            if (Time.time > nextDebug)
+            {
+                nextDebug = Time.time + 1f;
+                Debug.LogError(name + ": enemyBase es NULL (revisa el tag de la base)");
+            }
+            return;
+        }
+
+        Collider col = enemyBase.GetComponentInChildren<Collider>();
+        Vector3 closest = col != null ? col.ClosestPoint(transform.position) : enemyBase.transform.position;
+        float dist = Vector3.Distance(transform.position, closest);
+        float allowed = navMeshAgent.stoppingDistance + 2f;
+
+        if (Time.time > nextDebug)
+        {
+            nextDebug = Time.time + 1f;
+            Debug.Log($"{name} -> base: {enemyBase.name} | collider: {(col != null ? col.GetType().Name : "NINGUNO")} " +
+                      $"| dist: {dist:F1} / permitido: {allowed:F1} | path: {navMeshAgent.pathStatus} " +
+                      $"| attackCoroutine null: {attackCoroutine == null}");
+        }
+
+        if (attackCoroutine == null && dist <= allowed)
+        {
+            enemyHit = enemyBase;
+            attackCoroutine = StartCoroutine(Attack(enemyBase));
+        }
+    }
+    private void Shoot(GameObject target)
     {
         Debug.Log("Shoot called");
 
