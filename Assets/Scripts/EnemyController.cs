@@ -21,7 +21,7 @@ public class EnemyController : MonoBehaviour, IDamageable
     [field: SerializeField] public float maxHealth { get; set; }
     public float currentHealth { get; set; }
     [SerializeField] public float damage;
-    [SerializeField] private float range;
+    [SerializeField] public float range;
     [SerializeField] public float cooldown;
     [SerializeField] public float lootPoints;
     
@@ -199,9 +199,12 @@ public class EnemyController : MonoBehaviour, IDamageable
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, range);
 
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireCube(navMeshAgent.destination, Vector3.one);
-        Gizmos.DrawLine(transform.position, navMeshAgent.destination);
+        if (navMeshAgent.destination != null)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireCube(navMeshAgent.destination, Vector3.one);
+            Gizmos.DrawLine(transform.position, navMeshAgent.destination);
+        }
 
     }
 }

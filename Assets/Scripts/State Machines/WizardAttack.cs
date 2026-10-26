@@ -11,11 +11,11 @@ public class WizardAttack : EnemyAttackState
     private float attackRadius;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public WizardAttack(EnemyController enemy, EnemyStateMachine enemyStateMachine) : base(enemy, enemyStateMachine)
+    public WizardAttack(WizardController enemy, EnemyStateMachine enemyStateMachine) : base(enemy, enemyStateMachine)
     {
         audioSource = enemy.gameObject.GetComponent<AudioSource>();
         animator = enemy.gameObject.GetComponent<Animator>();
-        //attackRadius = enemy.gameObject.GetComponent<WizardAttack>().attackRadius;
+        attackRadius = enemy.attackRadius;
     }
     
 
@@ -33,7 +33,7 @@ public class WizardAttack : EnemyAttackState
             if (enemy.attackTimer >= enemy.cooldown)
             {
                 RaycastHit[] hits = Physics.SphereCastAll(enemy.enemyHit.transform.position, 
-                    5, Vector3.forward,20, 
+                    attackRadius, Vector3.forward,enemy.range, 
                     enemy.enemyMask, QueryTriggerInteraction.Collide);
 
                 foreach (RaycastHit hit in hits)

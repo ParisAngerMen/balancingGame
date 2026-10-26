@@ -9,10 +9,19 @@ using UnityEngine.AI;
 public class WizardController : EnemyController
 {
     [Header("Wizard")]
-    [SerializeField] private float attackRadius;
+    [SerializeField] public float attackRadius;
 
-    public override void SetAttack()
+    public override void SetAttack()  
     {
         AttackState = new WizardAttack(this, StateMachine);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (StateMachine.CurrentEnemyState == AttackState && this != null)
+        {
+            Gizmos.color = Color.brown;
+            Gizmos.DrawWireSphere(enemyHit.transform.position, 5);
+        }
     }
 }

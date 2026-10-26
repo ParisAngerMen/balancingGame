@@ -56,6 +56,11 @@ public class ShopScript : MonoBehaviour
     public void BuyArcher()
     {
         BuyUnit(2);
+    }    
+    
+    public void BuyWizard()
+    {
+        BuyUnit(3);
     }
 
 
