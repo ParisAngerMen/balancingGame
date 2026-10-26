@@ -283,7 +283,7 @@ GameObject:
   - component: {fileID: -4077445722942244346}
   - component: {fileID: 5164620262394287605}
   - component: {fileID: -6862584325092175032}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Melee
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -406,7 +406,7 @@ MonoBehaviour:
   navMeshAgent: {fileID: 0}
   enemyMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 128
   healthBar: {fileID: 6856755763271432700}
   hitEffectPrefab: {fileID: 82963762037251579, guid: 5b3d25cf329dec942bf3e504d02ecd79, type: 3}
   attackSound: {fileID: 8300000, guid: 9865e417a58f5c948a058abd0d29a1c0, type: 3}
@@ -581,7 +581,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 981fdbc699bd6674886bddab69c6b661, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MaterialAdder
-  blueMaterial: {fileID: 2100000, guid: d2930f92d40ae764ea6f20947856271b, type: 2}
+  blueMaterial: {fileID: 2100000, guid: 11eb3dcddc2caf841be667ee79b4f7d1, type: 2}
   redMaterial: {fileID: 2100000, guid: ac920a1e5dee4cd4089f38664556f581, type: 2}
 --- !u!1 &7261605925611341912
 GameObject:

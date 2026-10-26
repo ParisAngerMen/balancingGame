@@ -66,6 +66,16 @@ public class SpawnerScript : MonoBehaviour
             if (GetKeyDown(KeyCode.Alpha6))
             {
                 SetTeam(enemies[2], false);
+            }            
+            
+            if (GetKeyDown(KeyCode.Alpha7))
+            {
+                SetTeam(enemies[3], true);
+            }            
+            
+            if (GetKeyDown(KeyCode.Alpha8))
+            {
+                SetTeam(enemies[3], false);
             }
         }
 
