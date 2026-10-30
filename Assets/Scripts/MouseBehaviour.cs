@@ -15,17 +15,44 @@ using static UnityEditor.Handles;
 public class MouseBehaviour : MonoBehaviour
 {
     private Camera camera;
+
+    public EnemyController baseEnemy;
+    private float baseEnemyCP;
     
+    [Header("Realtime Stats")]
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI healthText;
     public TextMeshProUGUI attackTimer;
     public TextMeshProUGUI enemySeen;
     public TextMeshProUGUI currentState;
     public TextMeshProUGUI teamName;
+    
+    [Header("BaseStats")]
+    public TextMeshProUGUI maxhealth;
+    public TextMeshProUGUI damage;
+    public TextMeshProUGUI range;
+    public TextMeshProUGUI cooldown;
+    public TextMeshProUGUI lootPoints;
+    public TextMeshProUGUI cost;
+    
+    [Header("OtherStats")]
+    [SerializeField] private TextMeshProUGUI attackpersectext;
+    [SerializeField] private TextMeshProUGUI dpstext;
+    [SerializeField] private TextMeshProUGUI ehptext;
+    [SerializeField] private TextMeshProUGUI combatpowertext;
+    [SerializeField] private TextMeshProUGUI relativepowertext;
+
+    private float attackpersec;
+    private float dps;
+    private float ehp;
+    private float combatpower;
+    private float relativepower;
 
     private void Awake()
     {
         camera = Camera.main;
+        float baseattackpersec = 1 / baseEnemy.cooldown;
+        baseEnemyCP = (baseEnemy.maxHealth * baseattackpersec * (baseEnemy.damage / baseEnemy.maxHealth)) * 1000;
     }
 
     public void OnClick() 
@@ -39,7 +66,11 @@ public class MouseBehaviour : MonoBehaviour
                 enemySeen.enabled = true;
                 currentState.enabled = true;
                 
-                StartCoroutine(EnemyStatNames(hit));
+                var enemy = hit.collider.gameObject;
+                var enemyController = hit.collider.gameObject.GetComponent<EnemyController>();
+                
+                GetPassiveValues(enemyController);
+                StartCoroutine(GetActiveValues(hit));
             }
 
             if (hit.collider.CompareTag("RedBase") || hit.collider.CompareTag("BlueBase"))
@@ -54,6 +85,28 @@ public class MouseBehaviour : MonoBehaviour
 
         }
     }
+
+    void GetPassiveValues(EnemyController enemyController)
+    {
+        maxhealth.text = "Max Health: " + enemyController.maxHealth;
+        damage.text = "Damage: " + enemyController.damage;
+        range.text = "Range: " + enemyController.range;
+        cooldown.text = "Cooldown: " + enemyController.cooldown;
+        lootPoints.text = "Loot Points: " + enemyController.lootPoints;
+        //acost.text = "Cooldown: " + enemyController.cost;
+
+        attackpersec = (1f / enemyController.cooldown);
+        dps = Mathf.Round(attackpersec * 10.0f) * 0.1f;
+        ehp = enemyController.maxHealth / baseEnemy.damage;
+        combatpower = (enemyController.maxHealth * attackpersec * (enemyController.damage / baseEnemy.maxHealth)) * 1000;
+        relativepower = ((combatpower / baseEnemyCP) * 100);
+
+        attackpersectext.text = "Attack Per Sec: " + attackpersec;
+        dpstext.text = "DPS: " + dps;
+        ehptext.text = "EHP: " + ehp;
+        combatpowertext.text = "Combat Power: " + combatpower;
+        relativepowertext.text = "Relative Power: " + relativepower + "%";
+    }
         
 
     // Update is called once per frame
@@ -62,23 +115,24 @@ public class MouseBehaviour : MonoBehaviour
         
     }
     
-    private IEnumerator EnemyStatNames(RaycastHit hit)
+    private IEnumerator GetActiveValues(RaycastHit hit)
     {
         while (true)
         {
             if (hit.collider != null)
             {
                 var enemy = hit.collider.gameObject;
+                var enemyController = hit.collider.gameObject.GetComponent<EnemyController>();
             
                 nameText.text = enemy.name;
-                healthText.text = "Health: " + enemy.GetComponent<IDamageable>().currentHealth;
-                attackTimer.text = "Attack timer: " + enemy.GetComponent<EnemyController>().attackTimer;
+                healthText.text = "Current Health: " + enemy.GetComponent<IDamageable>().currentHealth;
+                attackTimer.text = "Attack Timer: " + enemyController.attackTimer;
                 teamName.text = "Layer: " + enemy.layer;
-                currentState.text = "Current State: " + enemy.GetComponent<EnemyController>().StateMachine.CurrentEnemyState;
+                currentState.text = "Current State: " + enemyController.StateMachine.CurrentEnemyState;
 
-                if (enemy.GetComponent<EnemyController>().enemyHit != null)
+                if (enemyController.enemyHit != null)
                 {
-                    enemySeen.text = "Going to: " + enemy.GetComponent<EnemyController>().enemyHit.name;
+                    enemySeen.text = "Going to: " + enemyController.enemyHit.name;
                 }
 
                 else
