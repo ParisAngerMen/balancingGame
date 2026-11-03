@@ -321,7 +321,7 @@ MonoBehaviour:
   <maxHealth>k__BackingField: 20
   damage: 6
   range: 2
-  cooldown: 3
+  cooldown: 2
   lootPoints: 50
   visionRange: 10
   attackTimer: 0

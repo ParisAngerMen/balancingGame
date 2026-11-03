@@ -400,8 +400,8 @@ MonoBehaviour:
   speed: 5
   <maxHealth>k__BackingField: 10
   damage: 2
-  range: 15
-  cooldown: 1.4
+  range: 6
+  cooldown: 2
   lootPoints: 40
   visionRange: 10
   attackTimer: 0
