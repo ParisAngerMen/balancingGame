@@ -20,7 +20,7 @@ public class DebugOptions : MonoBehaviour
     
     public void EnableSpawning()
     {
-        spawner.canSpawn = !spawner.canSpawn;
+        PointManager.instance.pointsEnabled = !PointManager.instance.pointsEnabled;
         Debug.Log("Enable spawning: " + spawner.canSpawn);
     }
 

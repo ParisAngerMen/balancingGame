@@ -93,7 +93,7 @@ public class MouseBehaviour : MonoBehaviour
         range.text = "Range: " + enemyController.range;
         cooldown.text = "Cooldown: " + enemyController.cooldown;
         lootPoints.text = "Loot Points: " + enemyController.lootPoints;
-        //acost.text = "Cooldown: " + enemyController.cost;
+        cost.text = "Cost: " + enemyController.cost;
 
         attackpersec = (1f / enemyController.cooldown);
         dps = Mathf.Round(attackpersec * 10.0f) * 0.1f;

@@ -398,6 +398,7 @@ MonoBehaviour:
   range: 2
   cooldown: 1
   lootPoints: 25
+  cost: 50
   visionRange: 10
   attackTimer: 0
   angleRange: 180

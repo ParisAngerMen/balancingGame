@@ -24,6 +24,7 @@ public class EnemyController : MonoBehaviour, IDamageable
     [SerializeField] public float range;
     [SerializeField] public float cooldown;
     [SerializeField] public float lootPoints;
+    [SerializeField] public float cost;
     
     [Header("Other Variables")]
     [SerializeField] private float visionRange;
@@ -34,7 +35,6 @@ public class EnemyController : MonoBehaviour, IDamageable
     public GameObject enemyHit;
     public NavMeshAgent navMeshAgent;
     public LayerMask enemyMask;
-    private Animator animator;
 
     [Header("Enemy States")] 
     public EnemyStateMachine StateMachine { get; set; }
@@ -50,12 +50,10 @@ public class EnemyController : MonoBehaviour, IDamageable
     [SerializeField] public AudioClip attackSound;
     [SerializeField] public AudioClip hurtSound;
     private AudioSource audioSource;
-    protected Coroutine attackCoroutine;
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
         navMeshAgent = GetComponent<NavMeshAgent>();
-        animator = GetComponent<Animator>();
         
         WalkState = new EnemyWalkState(this, StateMachine);
         SetAttack();
