@@ -25,6 +25,7 @@ public class WizardAttack : EnemyAttackState
 
         if (enemy.enemyHit != null)
         {
+            enemy.navMeshAgent.SetDestination(enemy.enemyHit.transform.position);
             enemy.gameObject.transform.LookAt(enemy.enemyHit.transform);
         
             enemy.attackTimer += Time.deltaTime;

@@ -19,7 +19,6 @@ public class EnemyAttackState : EnemyState
     public override void EnterState()
     {
         Debug.Log("Enter attack state");
-        enemy.navMeshAgent.SetDestination(enemy.enemyHit.transform.position);
         animator.SetBool("attack", true);
         enemy.navMeshAgent.updateRotation = false;
     }
@@ -38,8 +37,9 @@ public class EnemyAttackState : EnemyState
 
         if (enemy.enemyHit != null)
         {
+            enemy.navMeshAgent.SetDestination(enemy.enemyHit.transform.position);
             enemy.gameObject.transform.LookAt(enemy.enemyHit.transform);
-        
+            
             enemy.attackTimer += Time.deltaTime;
             Debug.Log("Time to attack: " + enemy.attackTimer);
 

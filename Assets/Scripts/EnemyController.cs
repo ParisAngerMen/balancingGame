@@ -18,6 +18,9 @@ public class EnemyController : MonoBehaviour, IDamageable
     // Float
     [Header("Balance Variables")]
     [SerializeField] private float speed;
+    public float invunerableSeconds = 1f;
+    private float invunerableTimer;
+    private bool canBeDamaged = true;
     [field: SerializeField] public float maxHealth { get; set; }
     public float currentHealth { get; set; }
     [SerializeField] public float damage;
@@ -40,7 +43,6 @@ public class EnemyController : MonoBehaviour, IDamageable
     public EnemyStateMachine StateMachine { get; set; }
     public EnemyState WalkState { get; set; }
     [SerializeField] public EnemyState AttackState;
-
     
     [Header("UI")]
     [SerializeField]private Slider healthBar;
@@ -107,18 +109,33 @@ public class EnemyController : MonoBehaviour, IDamageable
     {
         Debug.Log("EnemyState: " + StateMachine.CurrentEnemyState);
         StateMachine.CurrentEnemyState.FrameUpdate();
+
+        if (!canBeDamaged)
+        {
+            Debug.Log("Invulnerable timer: " + invunerableTimer);
+            invunerableTimer += Time.deltaTime;
+            if (invunerableTimer >= invunerableSeconds)
+            {
+                invunerableTimer = 0f;
+                canBeDamaged = true;
+            }
+        }
+
     }
     
 
     public void TakeDamage(float damage)
     {
-        currentHealth -= damage;
+        if (canBeDamaged)
+        {
+            currentHealth -= damage;
+            canBeDamaged = false;
+        }
 
         if (healthBar != null)
         {
             healthBar.value = currentHealth;
         }
-
 
         if (currentHealth <= 0)
         {
@@ -137,7 +154,7 @@ public class EnemyController : MonoBehaviour, IDamageable
         }
 
     }
-
+    
     public void Die()
     {
         StopAllCoroutines();
@@ -164,7 +181,6 @@ public class EnemyController : MonoBehaviour, IDamageable
     {
         while (true)
         {
-            
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, visionRange, enemyMask,
                 QueryTriggerInteraction.Collide);
             
@@ -172,14 +188,16 @@ public class EnemyController : MonoBehaviour, IDamageable
             {
                 Vector3 hitPoint = hit.transform.position;
                 Vector3 targetDirection = hitPoint - transform.position;
-
+                
                 float angle = Vector3.Angle(targetDirection, transform.forward);
                 
-                if (angle < angleRange)
+                if (angle < angleRange && targetDirection.magnitude < navMeshAgent.destination.magnitude)
                 {
                     Debug.Log("Angle: " + angle);
                     enemyHit = hit.gameObject;
+                    navMeshAgent.SetDestination(enemyHit.transform.position);
                     StateMachine.ChangeState(AttackState);
+                    
                 }
             }
             yield return new WaitForSeconds(0.1f);
@@ -196,13 +214,10 @@ public class EnemyController : MonoBehaviour, IDamageable
         
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, range);
-
-        if (navMeshAgent.destination != null)
-        {
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireCube(navMeshAgent.destination, Vector3.one);
-            Gizmos.DrawLine(transform.position, navMeshAgent.destination);
-        }
+        
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireCube(navMeshAgent.destination, Vector3.one);
+        Gizmos.DrawLine(transform.position, navMeshAgent.destination);
 
     }
 }

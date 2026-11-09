@@ -22,6 +22,7 @@ public class ArcherAttack : EnemyAttackState
 
         if (enemy.enemyHit)
         {
+            enemy.navMeshAgent.SetDestination(enemy.enemyHit.transform.position);
             enemy.gameObject.transform.LookAt(enemy.enemyHit.transform);
         
             Vector3 dir = enemy.enemyHit.transform.position - position;
