@@ -318,7 +318,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   enemyBase: {fileID: 0}
   speed: 2.5
-  invunerableSeconds: 1
+  invunerableSeconds: 2
   <maxHealth>k__BackingField: 20
   damage: 8
   range: 3

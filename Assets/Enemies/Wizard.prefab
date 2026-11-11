@@ -283,7 +283,7 @@ GameObject:
   - component: {fileID: 5164620262394287605}
   - component: {fileID: -6862584325092175032}
   - component: {fileID: 9081246475147729596}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Wizard
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -388,7 +388,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 5441500299126889127}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 1
   m_Speed: 3.5
   m_Acceleration: 35
   avoidancePriority: 50
@@ -565,7 +565,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WizardController
   enemyBase: {fileID: 0}
   speed: 5
-  invunerableSeconds: 1
+  invunerableSeconds: 0.5
   <maxHealth>k__BackingField: 10
   damage: 4
   range: 3
@@ -580,7 +580,7 @@ MonoBehaviour:
   navMeshAgent: {fileID: 0}
   enemyMask:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 64
   healthBar: {fileID: 6856755763271432700}
   hitEffectPrefab: {fileID: 0}
   attackSound: {fileID: 8300000, guid: 9865e417a58f5c948a058abd0d29a1c0, type: 3}

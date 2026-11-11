@@ -193,7 +193,7 @@ public class EnemyController : MonoBehaviour, IDamageable
                 
                 float angle = Vector3.Angle(targetDirection, transform.forward);
                 
-                if (angle < angleRange && targetDirection.magnitude < navMeshAgent.destination.magnitude)
+                if (angle < angleRange && StateMachine.CurrentEnemyState != AttackState)
                 {
                     Debug.Log("Angle: " + angle);
                     enemyHit = hit.gameObject;
