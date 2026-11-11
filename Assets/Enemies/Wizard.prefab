@@ -565,11 +565,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WizardController
   enemyBase: {fileID: 0}
   speed: 5
-  <maxHealth>k__BackingField: 15
-  damage: 2
-  range: 5
-  cooldown: 2.1
+  invunerableSeconds: 1
+  <maxHealth>k__BackingField: 10
+  damage: 4
+  range: 3
+  cooldown: 1
   lootPoints: 65
+  cost: 125
   visionRange: 10
   attackTimer: 0
   angleRange: 180

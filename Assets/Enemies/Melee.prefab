@@ -396,7 +396,7 @@ MonoBehaviour:
   invunerableSeconds: 1
   <maxHealth>k__BackingField: 10
   damage: 2
-  range: 2
+  range: 3
   cooldown: 1
   lootPoints: 25
   cost: 50

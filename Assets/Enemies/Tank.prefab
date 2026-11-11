@@ -320,8 +320,8 @@ MonoBehaviour:
   speed: 2.5
   invunerableSeconds: 1
   <maxHealth>k__BackingField: 20
-  damage: 6
-  range: 2
+  damage: 8
+  range: 3
   cooldown: 2
   lootPoints: 50
   cost: 100

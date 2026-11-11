@@ -397,14 +397,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   enemyBase: {fileID: 0}
-  speed: 5
+  speed: 2.5
   invunerableSeconds: 1
   <maxHealth>k__BackingField: 10
   damage: 2
-  range: 30
+  range: 9
   cooldown: 1
   lootPoints: 40
-  cost: 75
+  cost: 100
   visionRange: 30
   attackTimer: 0
   angleRange: 180
