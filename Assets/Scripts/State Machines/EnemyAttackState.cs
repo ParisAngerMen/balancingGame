@@ -26,7 +26,6 @@ public class EnemyAttackState : EnemyState
     public override void ExitState()
     {
         Debug.Log("Exit attack state");
-        enemy.navMeshAgent.SetDestination(enemy.enemyBase.transform.position);
         animator.SetBool("attack", false);
         enemy.navMeshAgent.updateRotation = true;
     }
@@ -59,6 +58,7 @@ public class EnemyAttackState : EnemyState
 
         else
         {
+            enemy.enemyHit = enemy.enemyBase;
             enemy.ChangeToWalkState();
         }
         

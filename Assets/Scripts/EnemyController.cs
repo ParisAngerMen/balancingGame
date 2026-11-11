@@ -108,6 +108,8 @@ public class EnemyController : MonoBehaviour, IDamageable
     private void Update()
     {
         Debug.Log("EnemyState: " + StateMachine.CurrentEnemyState);
+        Debug.Log(name + " going to: " + navMeshAgent.destination);
+        Debug.Log(name + " enemy hit: " + enemyHit);
         StateMachine.CurrentEnemyState.FrameUpdate();
 
         if (!canBeDamaged)
@@ -195,6 +197,7 @@ public class EnemyController : MonoBehaviour, IDamageable
                 {
                     Debug.Log("Angle: " + angle);
                     enemyHit = hit.gameObject;
+                    //Debug.Log(name + " enemy hit: "+ enemyHit);
                     navMeshAgent.SetDestination(enemyHit.transform.position);
                     StateMachine.ChangeState(AttackState);
                     
