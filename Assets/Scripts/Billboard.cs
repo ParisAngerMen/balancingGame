@@ -3,14 +3,24 @@ using UnityEngine;
 public class Billboard : MonoBehaviour
 {
     private Camera cam;
+
     void Start()
     {
-        cam = Camera.main; 
+        cam = Camera.main;
     }
 
-    // Update is called once per frame
     void LateUpdate()
     {
+        if (cam == null)
+        {
+            cam = Camera.main;
+
+            if (cam == null)
+            {
+                return;
+            }
+        }
+
         transform.forward = cam.transform.forward;
     }
 }

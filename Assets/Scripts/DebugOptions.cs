@@ -1,12 +1,9 @@
-using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Interactions;
 
 public class DebugOptions : MonoBehaviour
 {
     public SpawnerScript spawner;
-    
+
     public GameObject pauseMenu;
     public GameObject gameplayCanvas;
     public GameObject debugCanvas;
@@ -17,17 +14,21 @@ public class DebugOptions : MonoBehaviour
     {
         mouseBehaviour = GetComponent<MouseBehaviour>();
     }
-    
+
     public void EnableSpawning()
     {
         PointManager.instance.pointsEnabled = !PointManager.instance.pointsEnabled;
-        Debug.Log("Enable spawning: " + spawner.canSpawn);
+        Debug.Log("Points enabled: " + PointManager.instance.pointsEnabled);
     }
 
     public void EnableDebug()
     {
         debugCanvas.SetActive(!debugCanvas.activeSelf);
-        mouseBehaviour.enabled = !mouseBehaviour.enabled;
+
+        if (mouseBehaviour != null)
+        {
+            mouseBehaviour.enabled = !mouseBehaviour.enabled;
+        }
     }
 
     public void EnableAI()
@@ -39,7 +40,7 @@ public class DebugOptions : MonoBehaviour
     public void OnPause()
     {
         Debug.Log("Click pause");
-        
+
         pauseMenu.SetActive(!pauseMenu.activeSelf);
         gameplayCanvas.SetActive(!pauseMenu.activeSelf);
 
@@ -56,4 +57,9 @@ public class DebugOptions : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        // timeScale is global: never leave the next scene frozen
+        Time.timeScale = 1;
+    }
 }

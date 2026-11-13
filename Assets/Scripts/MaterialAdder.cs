@@ -1,12 +1,8 @@
-using System;
-using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class MaterialAdder : MonoBehaviour
 {
     private SkinnedMeshRenderer[] skinnedMeshRenderer;
-    private GameObject[] bodyParts;
 
     public Material blueMaterial;
     public Material redMaterial;
@@ -18,31 +14,21 @@ public class MaterialAdder : MonoBehaviour
 
     private void Start()
     {
-        if (gameObject.layer == 6)
-        {
-            AddMaterial(true);
-        }
-        
-        else
-        {
-            AddMaterial(false);
-        }
+        AddMaterial(gameObject.layer == LayerMask.NameToLayer("Red"));
     }
 
     public void AddMaterial(bool isRed)
     {
+        Material teamMaterial = isRed ? redMaterial : blueMaterial;
+
+        if (teamMaterial == null)
+        {
+            return;
+        }
+
         foreach (SkinnedMeshRenderer skin in skinnedMeshRenderer)
         {
-            if (isRed)
-            {
-                Debug.Log("Adding red skin");
-                skin.material = redMaterial;
-            }
-
-            else
-            {
-                skin.material = blueMaterial;
-            }
+            skin.material = teamMaterial;
         }
     }
 }

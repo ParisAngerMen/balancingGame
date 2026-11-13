@@ -1,64 +1,41 @@
-using System.Collections;
-using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.U2D;
 
 [System.Serializable]
 public class WizardAttack : EnemyAttackState
 {
-    private AudioSource audioSource;
-    private Animator animator;
-    private float attackRadius;
-    
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private readonly WizardController wizard;
+    private readonly HashSet<IDamageable> damagedTargets = new HashSet<IDamageable>();
+
     public WizardAttack(WizardController enemy, EnemyStateMachine enemyStateMachine) : base(enemy, enemyStateMachine)
     {
-        audioSource = enemy.gameObject.GetComponent<AudioSource>();
-        animator = enemy.gameObject.GetComponent<Animator>();
-        attackRadius = enemy.attackRadius;
+        wizard = enemy;
     }
-    
 
-    public override void FrameUpdate()
+    protected override void PerformAttack(GameObject target)
     {
-        Debug.Log("Enemy hit: " + enemy.enemyHit);
+        // Area damage centred on the target
+        Collider[] hits = Physics.OverlapSphere(target.transform.position, wizard.attackRadius,
+            enemy.enemyMask, QueryTriggerInteraction.Collide);
 
-        if (enemy.enemyHit != null)
+        damagedTargets.Clear();
+
+        foreach (Collider hit in hits)
         {
-            enemy.navMeshAgent.SetDestination(enemy.enemyHit.transform.position);
-            enemy.gameObject.transform.LookAt(enemy.enemyHit.transform);
-        
-            enemy.attackTimer += Time.deltaTime;
-            Debug.Log("Time to attack: " + enemy.attackTimer);
+            IDamageable damageable = hit.GetComponentInParent<IDamageable>();
 
-            if (enemy.attackTimer >= enemy.cooldown)
+            // Each unit is only damaged once per attack, even if it has several colliders
+            if (damageable != null && damagedTargets.Add(damageable))
             {
-                RaycastHit[] hits = Physics.SphereCastAll(enemy.enemyHit.transform.position, 
-                    attackRadius, Vector3.forward,enemy.range, 
-                    enemy.enemyMask, QueryTriggerInteraction.Collide);
-
-                foreach (RaycastHit hit in hits)
-                {
-                    Debug.Log("Targets: " + hits.Length);
-                    
-                    IDamageable damageable = hit.collider.GetComponent<IDamageable>();
-
-                    if (enemy.attackSound != null)
-                    {
-                        audioSource.PlayOneShot(enemy.attackSound);
-                    }
-                
-                    damageable.TakeDamage(enemy.damage);
-                    enemy.attackTimer = 0;
-                }
+                damageable.TakeDamage(enemy.damage);
             }
         }
 
-        else
+        if (damagedTargets.Count > 0)
         {
-            enemy.ChangeToWalkState();
+            PlayAttackSound();
         }
-        
-    }
 
+        damagedTargets.Clear();
+    }
 }

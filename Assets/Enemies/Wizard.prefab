@@ -414,10 +414,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UnitStats
   speed: 5
-  health: 15
-  damage: 2
-  range: 5
-  cooldown: 2.1
+  health: 10
+  damage: 4
+  range: 3
+  cooldown: 2
 --- !u!95 &-4077445722942244346
 Animator:
   serializedVersion: 7
@@ -565,11 +565,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WizardController
   enemyBase: {fileID: 0}
   speed: 5
-  invunerableSeconds: 0.5
+  invunerableSeconds: 0
   <maxHealth>k__BackingField: 10
   damage: 4
   range: 3
-  cooldown: 1
+  cooldown: 2
   lootPoints: 65
   cost: 125
   visionRange: 10

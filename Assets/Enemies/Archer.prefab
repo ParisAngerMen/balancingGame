@@ -382,8 +382,8 @@ MonoBehaviour:
   speed: 5
   health: 10
   damage: 2
-  range: 15
-  cooldown: 1.4
+  range: 24
+  cooldown: 1
 --- !u!114 &2382914264945682958
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -398,13 +398,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   enemyBase: {fileID: 0}
   speed: 5
-  invunerableSeconds: 0.5
+  invunerableSeconds: 0
   <maxHealth>k__BackingField: 10
   damage: 2
-  range: 9
-  cooldown: 0.5
+  range: 24
+  cooldown: 1
   lootPoints: 40
-  cost: 75
+  cost: 100
   visionRange: 30
   attackTimer: 0
   angleRange: 180

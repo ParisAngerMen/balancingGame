@@ -1,24 +1,13 @@
-using System;
 using System.Collections;
-using System.Linq;
 using TMPro;
-using Unity.VectorGraphics;
-using Unity.VisualScripting;
-using UnityEditor;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
-using UnityEngine.AI;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Interactions;
-using static UnityEditor.Handles;
 
 public class MouseBehaviour : MonoBehaviour
 {
-    private Camera camera;
+    private Camera cam;
 
     public EnemyController baseEnemy;
-    private float baseEnemyCP;
-    
+
     [Header("Realtime Stats")]
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI healthText;
@@ -26,7 +15,7 @@ public class MouseBehaviour : MonoBehaviour
     public TextMeshProUGUI enemySeen;
     public TextMeshProUGUI currentState;
     public TextMeshProUGUI teamName;
-    
+
     [Header("BaseStats")]
     public TextMeshProUGUI maxhealth;
     public TextMeshProUGUI damage;
@@ -34,7 +23,7 @@ public class MouseBehaviour : MonoBehaviour
     public TextMeshProUGUI cooldown;
     public TextMeshProUGUI lootPoints;
     public TextMeshProUGUI cost;
-    
+
     [Header("OtherStats")]
     [SerializeField] private TextMeshProUGUI attackpersectext;
     [SerializeField] private TextMeshProUGUI dpstext;
@@ -48,42 +37,97 @@ public class MouseBehaviour : MonoBehaviour
     private float combatpower;
     private float relativepower;
 
+    // "Number of Units" column of the Sheet: the debug menu inspects a single unit
+    private const float NumberOfUnits = 1f;
+
+    // Only one object is inspected at a time
+    private Coroutine statsRoutine;
+
     private void Awake()
     {
-        camera = Camera.main;
-        float baseattackpersec = 1 / baseEnemy.cooldown;
-        baseEnemyCP = (baseEnemy.maxHealth * baseattackpersec * (baseEnemy.damage / baseEnemy.maxHealth)) * 1000;
+        cam = Camera.main;
     }
 
-    public void OnClick() 
+    private static float AttacksPerSecond(EnemyController enemyController)
     {
-        Physics.Raycast(camera.ScreenPointToRay(Input.mousePosition), out RaycastHit hit);
+        return enemyController.cooldown > 0f ? 1f / enemyController.cooldown : 0f;
+    }
 
-        if (hit.collider != null)
+    // Sheet: Time to Fire = MAX(0, Range - base Range) / (Speed + base Speed)
+    private float TimeToFire(EnemyController enemyController)
+    {
+        if (baseEnemy == null)
         {
-            if (hit.collider.CompareTag("Enemy"))
+            return 0f;
+        }
+
+        float combinedSpeed = enemyController.Speed + baseEnemy.Speed;
+
+        return combinedSpeed > 0f
+            ? Mathf.Max(0f, enemyController.range - baseEnemy.range) / combinedSpeed
+            : 0f;
+    }
+
+    // Sheet: P = MaxHP * DPS * Number of Units^2 * (1 + Time to Fire * Cooldown)
+    private float CombatPower(EnemyController enemyController)
+    {
+        float unitDps = enemyController.damage * AttacksPerSecond(enemyController);
+
+        return enemyController.maxHealth * unitDps * NumberOfUnits * NumberOfUnits *
+               (1f + TimeToFire(enemyController) * enemyController.cooldown);
+    }
+
+    public void OnClick()
+    {
+        if (cam == null)
+        {
+            cam = Camera.main;
+        }
+
+        if (cam == null || !Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out RaycastHit hit))
+        {
+            return;
+        }
+
+        GameObject clicked = hit.collider.gameObject;
+
+        if (hit.collider.CompareTag("Enemy"))
+        {
+            var enemyController = clicked.GetComponentInParent<EnemyController>();
+
+            if (enemyController != null)
             {
                 enemySeen.enabled = true;
                 currentState.enabled = true;
-                
-                var enemy = hit.collider.gameObject;
-                var enemyController = hit.collider.gameObject.GetComponent<EnemyController>();
-                
+
                 GetPassiveValues(enemyController);
-                StartCoroutine(GetActiveValues(hit));
+                ShowStats(GetActiveValues(enemyController));
             }
-
-            if (hit.collider.CompareTag("RedBase") || hit.collider.CompareTag("BlueBase"))
-            {
-                enemySeen.enabled = false;
-                currentState.enabled = false;
-                
-                StartCoroutine(BaseStatNames(hit));
-            }
-            
-            Selection.activeGameObject = hit.collider.gameObject;
-
         }
+
+        else if (hit.collider.CompareTag("RedBase") || hit.collider.CompareTag("BlueBase"))
+        {
+            enemySeen.enabled = false;
+            currentState.enabled = false;
+
+            ShowStats(BaseStatNames(clicked));
+        }
+
+#if UNITY_EDITOR
+        // Editor only: this API does not exist in a built game
+        UnityEditor.Selection.activeGameObject = clicked;
+#endif
+    }
+
+    private void ShowStats(IEnumerator routine)
+    {
+        // Stop following the previously selected object before following a new one
+        if (statsRoutine != null)
+        {
+            StopCoroutine(statsRoutine);
+        }
+
+        statsRoutine = StartCoroutine(routine);
     }
 
     void GetPassiveValues(EnemyController enemyController)
@@ -95,11 +139,14 @@ public class MouseBehaviour : MonoBehaviour
         lootPoints.text = "Loot Points: " + enemyController.lootPoints;
         cost.text = "Cost: " + enemyController.cost;
 
-        attackpersec = (1f / enemyController.cooldown);
-        dps = Mathf.Round(attackpersec * 10.0f) * 0.1f;
-        ehp = enemyController.maxHealth / baseEnemy.damage;
-        combatpower = (enemyController.maxHealth * attackpersec * (enemyController.damage / baseEnemy.maxHealth)) * 1000;
-        relativepower = ((combatpower / baseEnemyCP) * 100);
+        attackpersec = AttacksPerSecond(enemyController);
+        // Damage per second = damage per hit x hits per second (rounded to one decimal)
+        dps = Mathf.Round(enemyController.damage * attackpersec * 10.0f) / 10.0f;
+        ehp = baseEnemy != null && baseEnemy.damage > 0f ? enemyController.maxHealth / baseEnemy.damage : 0f;
+        combatpower = CombatPower(enemyController);
+        // Calculated on every click: the base unit's stats can change when the Sheet is loaded
+        float baseEnemyCP = baseEnemy != null ? CombatPower(baseEnemy) : 0f;
+        relativepower = baseEnemyCP > 0f ? (combatpower / baseEnemyCP) * 100 : 0f;
 
         attackpersectext.text = "Attack Per Sec: " + attackpersec;
         dpstext.text = "DPS: " + dps;
@@ -107,76 +154,50 @@ public class MouseBehaviour : MonoBehaviour
         combatpowertext.text = "Combat Power: " + combatpower;
         relativepowertext.text = "Relative Power: " + relativepower + "%";
     }
-        
 
-    // Update is called once per frame
-    void Update()
+    private IEnumerator GetActiveValues(EnemyController enemyController)
     {
-        
-    }
-    
-    private IEnumerator GetActiveValues(RaycastHit hit)
-    {
-        while (true)
+        // Runs until the unit is destroyed (or another object is selected)
+        while (enemyController != null)
         {
-            if (hit.collider != null)
+            GameObject enemy = enemyController.gameObject;
+
+            nameText.text = enemy.name;
+            healthText.text = "Current Health: " + enemyController.currentHealth;
+            attackTimer.text = "Attack Timer: " + enemyController.attackTimer;
+            teamName.text = "Layer: " + enemy.layer;
+            currentState.text = "Current State: " + enemyController.StateMachine?.CurrentEnemyState;
+
+            if (enemyController.enemyHit != null)
             {
-                var enemy = hit.collider.gameObject;
-                var enemyController = hit.collider.gameObject.GetComponent<EnemyController>();
-            
-                nameText.text = enemy.name;
-                healthText.text = "Current Health: " + enemy.GetComponent<IDamageable>().currentHealth;
-                attackTimer.text = "Attack Timer: " + enemyController.attackTimer;
-                teamName.text = "Layer: " + enemy.layer;
-                currentState.text = "Current State: " + enemyController.StateMachine.CurrentEnemyState;
-
-                if (enemyController.enemyHit != null)
-                {
-                    enemySeen.text = "Going to: " + enemyController.enemyHit.name;
-                }
-
-                else
-                {
-                    enemySeen.text = "Going to: " + "None";
-                }
+                enemySeen.text = "Going to: " + enemyController.enemyHit.name;
             }
 
             else
             {
-                yield break;
+                enemySeen.text = "Going to: " + "None";
             }
-            
-            yield return new WaitForEndOfFrame();
 
+            yield return null;
         }
-        
+
+        statsRoutine = null;
     }
-    private IEnumerator BaseStatNames(RaycastHit hit)
+
+    private IEnumerator BaseStatNames(GameObject enemyBase)
     {
-        while (true)
+        // Runs until the base is destroyed (or another object is selected)
+        while (enemyBase != null)
         {
-            if (hit.collider != null)
-            {
-                var enemyBase = hit.collider.gameObject;
-            
-                nameText.text = enemyBase.name;
-                healthText.text = "Health: " + enemyBase.GetComponent<IDamageable>().currentHealth;
-                teamName.text = "Layer: " + enemyBase.layer;
-                
-            }
+            IDamageable damageable = enemyBase.GetComponent<IDamageable>();
 
-            else
-            {
-                yield break;
-            }
-            
-            yield return new WaitForEndOfFrame();
+            nameText.text = enemyBase.name;
+            healthText.text = "Health: " + (damageable != null ? damageable.currentHealth.ToString() : "-");
+            teamName.text = "Layer: " + enemyBase.layer;
 
+            yield return null;
         }
-        
-        
-        
+
+        statsRoutine = null;
     }
-
-
 }

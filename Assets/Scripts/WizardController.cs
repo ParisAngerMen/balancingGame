@@ -1,27 +1,26 @@
-using System;
-using System.Collections;
-using System.Runtime.CompilerServices;
-using UnityEditor.Experimental.GraphView;
-using UnityEditor.Searcher;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class WizardController : EnemyController
 {
     [Header("Wizard")]
     [SerializeField] public float attackRadius;
 
-    public override void SetAttack()  
+    public override void SetAttack()
     {
         AttackState = new WizardAttack(this, StateMachine);
     }
 
-    private void OnDrawGizmosSelected()
+    protected override void OnDrawGizmosSelected()
     {
-        if (StateMachine.CurrentEnemyState == AttackState && this != null)
+        base.OnDrawGizmosSelected();
+
+        // The state machine only exists while playing
+        if (StateMachine == null || enemyHit == null || StateMachine.CurrentEnemyState != AttackState)
         {
-            Gizmos.color = Color.brown;
-            Gizmos.DrawWireSphere(enemyHit.transform.position, 5);
+            return;
         }
+
+        Gizmos.color = Color.brown;
+        Gizmos.DrawWireSphere(enemyHit.transform.position, attackRadius);
     }
 }
